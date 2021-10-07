@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -27,58 +26,13 @@ class HomePage extends StatelessWidget {
         child: Column(
 
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                ElevatedButton(
-                  style: raisedButtonStyle,
-                  onPressed: (){
-                    print("Fui pra sensores");
-                  }, 
-                  child: Text('Sensores')
-                ),
-                ElevatedButton(
-                  style: raisedButtonStyle,
-                  onPressed: (){
-                    print("Fui pra Irrigações");
-                  }, 
-                  child: Text('Irrigações')
-                ),
-              ],
-            ),
-
-            Row(
-              children: <Widget>[
-                ElevatedButton(
-                  style: raisedButtonStyle,
-                  onPressed: (){
-                    print("Fui pra cultivos");
-                  }, 
-                  child: Text('Cultivos')
-                ),
-                ElevatedButton(
-                  style: raisedButtonStyle,
-                  onPressed: (){
-                    print("Fui pra Nutrientes");
-                  }, 
-                  child: Text('Nutrientes')
-                ),
-              ],
-            ),
-
-            Row(
-              children: <Widget>[
-                ElevatedButton(
-                  style: raisedButtonStyle,
-                  onPressed: (){
-                    print("Fui pra Relatórios");
-                  }, 
-                  child: Text('Relatórios')
-                ),
-              ],
-            ),
-
+            buttonMenu('Sensores', null),
+            buttonMenu('Irrigações', null),
+            buttonMenu('Cultivos', null),
+            buttonMenu('Nutrientes', null),
+            buttonMenu('Relatórios', null),
+  
           ],
-
         ),
 
       ),
@@ -96,3 +50,24 @@ final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     borderRadius: BorderRadius.all(Radius.circular(2)),
   ),
 );
+
+Widget buttonMenu (String title, dynamic context){
+
+  return Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      style: raisedButtonStyle,
+                      onPressed: (){
+                        print("Fui pra " + title);
+                      }, 
+                      child: Text(title)
+                    ),
+                  ),
+                ),
+              ],
+            );
+}
