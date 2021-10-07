@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:germina_app/screens/sensors/sensors.dart';
 
 class HomePage extends StatelessWidget {
   
@@ -8,33 +9,35 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-      appBar: PreferredSize(
+    return Scaffold
+    (
+      appBar: PreferredSize
+      (
         preferredSize: Size.fromHeight(60),
-        child: AppBar(
+        child: AppBar
+        (
           centerTitle: true,
-          title: Text(
-          "GerminaApp", 
-          style: TextStyle(color: Colors.white, fontSize: 30.0),
+          title: Text
+          (
+            "GerminaApp", 
+            style: TextStyle(color: Colors.white, fontSize: 30.0),
           ),
           backgroundColor: Color.fromRGBO(66, 174, 181, 95),
         ),
       ),
-      body: Container(
-
-        child: Column(
-
-          children: <Widget>[
-            buttonMenu('Sensores', null),
-            buttonMenu('Irrigações', null),
-            buttonMenu('Cultivos', null),
-            buttonMenu('Nutrientes', null),
-            buttonMenu('Relatórios', null),
-  
+      body: Container
+      (
+        child: Column
+        (
+          children: <Widget>
+          [
+            buttonMenu('Sensores', context, '/sensors'),
+            buttonMenu('Irrigações', context, '/irrigations'),
+            buttonMenu('Cultivos', context, '/crops'),
+            buttonMenu('Nutrientes', context, '/nutrients'),
+            buttonMenu('Relatórios', context, '/reports'),
           ],
         ),
-
       ),
     );
   }
@@ -51,7 +54,7 @@ final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
   ),
 );
 
-Widget buttonMenu (String title, dynamic context){
+Widget buttonMenu (String title, dynamic context, String nextPage){
 
   return Row(
               children: <Widget>[
@@ -62,7 +65,7 @@ Widget buttonMenu (String title, dynamic context){
                     child: ElevatedButton(
                       style: raisedButtonStyle,
                       onPressed: (){
-                        print("Fui pra " + title);
+                        Navigator.pushNamed(context, nextPage);
                       }, 
                       child: Text(title)
                     ),

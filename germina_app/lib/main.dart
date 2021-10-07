@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:germina_app/screens/crops/crops.dart';
 import 'package:germina_app/screens/home_page.dart';
+import 'package:germina_app/screens/irrigations/irrigations.dart';
+import 'package:germina_app/screens/nutrients/nutrients.dart';
+import 'package:germina_app/screens/reports/reports.dart';
+import 'package:germina_app/screens/sensors/sensors.dart';
 
 
 
@@ -28,7 +33,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: MaterialColor(0xFF42AEB5, color),
       ),
-      home: HomePage(),
+      initialRoute: '/',
+      routes: 
+      {
+        '/': (context) => const HomePage(),
+        //ROTAS DAS PAGINAS DE SENSORES
+        '/sensors': (context) => SensorsPage(),
+        //ROTAS DAS PAGINAS DE IRRIGAÇÕES
+        '/irrigations': (context) => IrrigationsPage(),
+        //ROTAS DAS PAGINAS DE CULTIVOS
+        '/crops': (context) => CropsPage(),
+        //ROTAS DAS PAGINAS DE NUTRIENTES
+        '/nutrients': (context) => NutrientsPage(),
+        //ROTAS DAS PAGINAS DE RELATÓRIOS
+        '/reports': (context) => ReportsPage(),
+      },
     );
   }
 }
