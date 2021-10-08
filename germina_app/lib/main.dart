@@ -33,10 +33,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: MaterialColor(0xFF42AEB5, color),
       ),
-      initialRoute: '/',
+      initialRoute: '/homePage',
       routes: 
       {
-        '/': (context) => const HomePage(),
+        //'/': (context) => IntroPage(),
+        '/homePage': (context) => const HomePage(),
         //ROTAS DAS PAGINAS DE SENSORES
         '/sensors': (context) => SensorsPage(),
         //ROTAS DAS PAGINAS DE IRRIGAÇÕES

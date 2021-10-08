@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SensorsPage extends StatefulWidget{
-  
+
   
   @override
   State<StatefulWidget> createState() => _SensorsPageState();
