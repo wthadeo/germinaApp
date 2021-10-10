@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: 
       {
-        '/': (context) => IntroPage(),
+        '/': (context) => const IntroPage(),
         '/homePage': (context) => const HomePage(),
         //ROTAS DAS PAGINAS DE SENSORES
         '/sensors': (context) => SensorsPage(),

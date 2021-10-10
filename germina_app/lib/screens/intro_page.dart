@@ -25,15 +25,16 @@ class IntroPage extends StatelessWidget {
               child: Image.asset('lib/assets/images/logo.png')),
           const SizedBox(
             child: Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
+              padding: EdgeInsets.only(left: 35.0, right: 30.0),
               child: Text(
                 'Gerenciamento e monitoramento na Agricultura',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20.0,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w700,
                   color: Color.fromRGBO(66, 174, 181, 1),
                   decoration: TextDecoration.none,
+                  fontFamily: 'Roboto', 
                 ),
               ),
             ),
