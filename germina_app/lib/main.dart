@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:germina_app/screens/crops/crops.dart';
 import 'package:germina_app/screens/home_page.dart';
+import 'package:germina_app/screens/intro_page.dart';
 import 'package:germina_app/screens/irrigations/irrigations.dart';
 import 'package:germina_app/screens/nutrients/nutrients.dart';
 import 'package:germina_app/screens/reports/reports.dart';
@@ -25,6 +26,8 @@ void main() => runApp(MyApp());
 
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -33,10 +36,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: MaterialColor(0xFF42AEB5, color),
       ),
-      initialRoute: '/homePage',
+      initialRoute: '/',
       routes: 
       {
-        //'/': (context) => IntroPage(),
+        '/': (context) => IntroPage(),
         '/homePage': (context) => const HomePage(),
         //ROTAS DAS PAGINAS DE SENSORES
         '/sensors': (context) => SensorsPage(),
