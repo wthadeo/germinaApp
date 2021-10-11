@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:germina_app/screens/home_page.dart';
 
-import '../constants.dart';
-
 class IntroPage extends StatelessWidget {
   const IntroPage({Key? key}) : super(key: key);
 
@@ -34,7 +32,7 @@ class IntroPage extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                   color: Color.fromRGBO(66, 174, 181, 1),
                   decoration: TextDecoration.none,
-                  fontFamily: 'Roboto', 
+                  fontFamily: 'Roboto',
                 ),
               ),
             ),
@@ -52,10 +50,13 @@ class IntroPage extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   )),
               onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const HomePage()));
               },
-              child: Text('Iniciar', style: TextStyle(fontSize: 20.0),)),
+              child: const Text(
+                'Iniciar',
+                style: TextStyle(fontSize: 20.0),
+              )),
         ],
       ),
     );
