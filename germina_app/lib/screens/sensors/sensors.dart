@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:germina_app/models/sensor.dart';
-import 'package:germina_app/models/soil_sensor.dart';
-import 'package:germina_app/models/temp_sensor.dart';
+import 'package:germina_app/communicator/communicator.dart';
+import 'package:germina_app/constants.dart';
+import 'package:germina_app/models/sensors/sensor.dart';
+import 'package:germina_app/repositories/sensors_repository.dart';
 import 'package:germina_app/screens/sensors/sensor_add.dart';
+import 'package:germina_app/screens/sensors/sensor_information.dart';
 
 class SensorsPage extends StatefulWidget {
   const SensorsPage({Key? key}) : super(key: key);
@@ -12,6 +14,8 @@ class SensorsPage extends StatefulWidget {
 }
 
 class _SensorsPageState extends State<SensorsPage> {
+  static List<Sensor> sensors = SensorsRepository.listOfSensors;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,17 +25,21 @@ class _SensorsPageState extends State<SensorsPage> {
           "Sensores",
           style: TextStyle(color: Colors.white, fontSize: 20.0),
         ),
-        backgroundColor: const Color.fromRGBO(66, 174, 181, 95),
+        backgroundColor: primaryColor,
       ),
       body: GridView.builder(
           itemCount: sensors.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
-          itemBuilder: (context, index) => SensorView(index)),
+              crossAxisCount: 2,
+              childAspectRatio: 1,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 20),
+          itemBuilder: (context, index) => SensorView(index, context)),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const SensorAdd()));
+        backgroundColor: primaryColor,
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => const SensorAdd()));
         },
         child: const Icon(Icons.add),
       ),
@@ -39,37 +47,54 @@ class _SensorsPageState extends State<SensorsPage> {
   }
 }
 
-Widget SensorView(int index) {
-  String name = sensors[index].name;
+// ignore: non_constant_identifier_names
+Widget SensorView(int index, dynamic context) {
+  String name = _SensorsPageState.sensors[index].name;
+  String category = _SensorsPageState.sensors[index].category;
 
-  return Container(
-    height: 50.0,
-    width: 50.0,
-    color: Colors.red,
-    margin: const EdgeInsets.all(10.0),
-    child: Center(
-      child: Text(
-        name,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 15.0,
+  return GestureDetector(
+    onTap: () {
+      Communicator.currentSensor = SensorsRepository.listOfSensors[index];
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => SensorInformation()));
+    },
+    child: Container(
+      height: 300,
+      width: 200,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: categoryColor2(category),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      margin: const EdgeInsets.all(10.0),
+      child: Center(
+        child: Text(
+          name,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15.0,
+          ),
         ),
       ),
     ),
   );
 }
 
-List<Sensor> sensors = [
-  SoilSensor(25,
-      name: 'sensor_soil1', protocol: 'unknown protocol', uri: 'unknown uri'),
-  SoilSensor(20,
-      name: 'sensor_soil2', protocol: 'unknown protocol', uri: 'unknown uri'),
-  SoilSensor(40,
-      name: 'sensor_soil3', protocol: 'unknown protocol', uri: 'unknown uri'),
-  TempSensor(36, 38,
-      name: 'sensor_temperature1',
-      protocol: 'unknown protocol',
-      uri: 'unknown uri')
-];
+MaterialColor categoryColor(String category) {
+  if (category == 'tempSensor') {
+    return Colors.amber;
+  } else {
+    return Colors.blue;
+  }
+}
+
+Color categoryColor2(String category) {
+  if (category == 'tempSensor') {
+    return Colors.amber;
+  } else {
+    return secondaryColor;
+  }
+}
+
 // 3 SENSORES DE UMIDADE DO SOLO ()
 // 1 SENSOR DE TEMPERATURA AMBIENTE/UMIDADE DO AR (DTH11)

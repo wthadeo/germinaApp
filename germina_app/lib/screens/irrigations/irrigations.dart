@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../constants.dart';
+
 class IrrigationsPage extends StatefulWidget {
   const IrrigationsPage({Key? key}) : super(key: key);
 
@@ -17,7 +19,7 @@ class _IrrigationsPageState extends State<IrrigationsPage> {
         "Irrigações",
         style: TextStyle(color: Colors.white, fontSize: 20.0),
       ),
-      backgroundColor: const Color.fromRGBO(66, 174, 181, 95),
+      backgroundColor: primaryColor,
     ));
   }
 }

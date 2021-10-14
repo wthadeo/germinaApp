@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:germina_app/constants.dart';
 
 class CropsPage extends StatefulWidget {
   const CropsPage({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _CropsPageState extends State<CropsPage> {
         "Cultivos",
         style: TextStyle(color: Colors.white, fontSize: 20.0),
       ),
-      backgroundColor: const Color.fromRGBO(66, 174, 181, 95),
+      backgroundColor: primaryColor,
     ));
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../constants.dart';
+
 class ReportsPage extends StatefulWidget {
   const ReportsPage({Key? key}) : super(key: key);
 
@@ -17,7 +19,7 @@ class _ReportsPageState extends State<ReportsPage> {
         "Relatórios",
         style: TextStyle(color: Colors.white, fontSize: 20.0),
       ),
-      backgroundColor: const Color.fromRGBO(66, 174, 181, 95),
+      backgroundColor: primaryColor,
     ));
   }
 }
