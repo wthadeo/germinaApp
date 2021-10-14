@@ -67,7 +67,7 @@ Widget SensorView(int index, dynamic context) {
       width: 200,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: categoryColor2(category),
+        color: categoryColor(category),
         borderRadius: BorderRadius.circular(15),
       ),
       margin: const EdgeInsets.all(10.0),
@@ -84,15 +84,8 @@ Widget SensorView(int index, dynamic context) {
   );
 }
 
-MaterialColor categoryColor(String category) {
-  if (category == 'tempSensor') {
-    return Colors.amber;
-  } else {
-    return Colors.blue;
-  }
-}
 
-Color categoryColor2(String category) {
+Color categoryColor(String category) {
   if (category == 'tempSensor') {
     return Colors.amber;
   } else {
