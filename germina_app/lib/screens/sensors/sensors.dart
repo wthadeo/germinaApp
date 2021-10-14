@@ -5,6 +5,7 @@ import 'package:germina_app/models/sensors/sensor.dart';
 import 'package:germina_app/repositories/sensors_repository.dart';
 import 'package:germina_app/screens/sensors/sensor_add.dart';
 import 'package:germina_app/screens/sensors/sensor_information.dart';
+import 'package:provider/provider.dart';
 
 class SensorsPage extends StatefulWidget {
   const SensorsPage({Key? key}) : super(key: key);
@@ -14,10 +15,13 @@ class SensorsPage extends StatefulWidget {
 }
 
 class _SensorsPageState extends State<SensorsPage> {
+  late SensorsRepository sensorsRep;
   static List<Sensor> sensors = SensorsRepository.listOfSensors;
 
   @override
   Widget build(BuildContext context) {
+    sensorsRep = Provider.of<SensorsRepository>(context);
+    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

@@ -1,8 +1,10 @@
+import 'dart:collection';
+import 'package:flutter/cupertino.dart';
 import 'package:germina_app/models/sensors/sensor.dart';
 import 'package:germina_app/models/sensors/soil_sensor.dart';
 import 'package:germina_app/models/sensors/temp_sensor.dart';
 
-class SensorsRepository{
+class SensorsRepository extends ChangeNotifier{
 
   static List<Sensor> listOfSensors = [
     SoilSensor(25,
@@ -37,6 +39,20 @@ class SensorsRepository{
       uri: 'unknown uri',
     ),
   ];
+
+  UnmodifiableListView<Sensor> get lista => UnmodifiableListView(listOfSensors);
+
+  saveAll(List<Sensor> sensors){
+    sensors.forEach((sensor) {
+      if(!listOfSensors.contains(sensor)) listOfSensors.add(sensor);
+     });
+    notifyListeners();
+  }
+
+  remove(Sensor sensor){
+    listOfSensors.remove(sensor);
+    notifyListeners();
+  }
 
 
 }
