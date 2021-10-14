@@ -45,7 +45,7 @@ class _SensorsPageState extends State<SensorsPage> {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => const SensorAdd()));
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white,),
       ),
     );
   }

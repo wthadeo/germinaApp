@@ -3,7 +3,6 @@ import 'package:germina_app/models/sensors/sensor.dart';
 import 'package:germina_app/models/sensors/soil_sensor.dart';
 import 'package:germina_app/models/sensors/temp_sensor.dart';
 import 'package:germina_app/repositories/sensors_repository.dart';
-import 'package:germina_app/screens/sensors/sensors.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
 
@@ -23,14 +22,6 @@ class _SensorAddState extends State<SensorAdd> {
       Sensor('', '', '', ''); //Sensor que será adicionado a lista de sensores
   List<Sensor> sensors = SensorsRepository.listOfSensors;
   String dropdownValue = 'Tipo de Sensor';
-
-  cleanFields() {
-    setState(() {
-      name = '';
-      protocol = '';
-      uri = '';
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

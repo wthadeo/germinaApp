@@ -45,7 +45,7 @@ class _CropsPageState extends State<CropsPage> {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => const CropAdd()));
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white,),
       ),
     );
   }
@@ -81,7 +81,7 @@ Widget SensorView(int index, dynamic context) {
               fontSize: 15.0,
             ),
           ),
-          SizedBox(height: 15.0,),
+          const SizedBox(height: 15.0,),
           Text(
             isActive(active),
             style: TextStyle(

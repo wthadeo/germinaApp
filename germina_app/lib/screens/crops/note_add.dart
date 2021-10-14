@@ -1,34 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:germina_app/communicator/communicator.dart';
 import 'package:germina_app/constants.dart';
-import 'package:germina_app/models/crop.dart';
+import 'package:germina_app/models/note.dart';
 import 'package:germina_app/repositories/crops_repository.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class CropAdd extends StatefulWidget {
-  const CropAdd({ Key? key }) : super(key: key);
+class NoteAdd extends StatefulWidget {
+  const NoteAdd({Key? key}) : super(key: key);
 
   @override
-  _CropAddState createState() => _CropAddState();
+  _NoteAddState createState() => _NoteAddState();
 }
 
-class _CropAddState extends State<CropAdd> {
-  late CropsRepository cropsRep;
+class _NoteAddState extends State<NoteAdd> {
+  late CropsRepository cropRepos;
   String name = '';
-  final atualDate = DateTime.now();
-  String age = '';
-  int qntOfPlants = 0;
-  Crop cropAdded = Crop('', '', 0, true, []);
-  List<Crop> crops = CropsRepository.listOfCrops;
+  String description = '';
+  final dateAtual = DateTime.now();
+
+  Note noteAdded = Note('', '', '');
+  List<Note> notes = Communicator.currentCrop.notesCrop;
 
   @override
   Widget build(BuildContext context) {
-    cropsRep = Provider.of<CropsRepository>(context);
+    cropRepos = Provider.of<CropsRepository>(context);
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          "Novo Cultivo",
+          "Nova Observação",
           style: TextStyle(color: Colors.white, fontSize: 20.0),
         ),
         backgroundColor: primaryColor,
@@ -53,31 +55,19 @@ class _CropAddState extends State<CropAdd> {
               padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 10.0),
               child: TextField(
                   onChanged: (text) {
-                    age = text;
+                    description = text;
                   },
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    labelText: 'Data Inicial Cultivo',
-                    hintText: 'aaaa-mm-dd'
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 10.0),
-              child: TextField(
-                  onChanged: (text) {
-                    qntOfPlants = int.parse(text);
-                  },
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                    labelText: 'Quantidade de Plantas',
+                    labelText: 'Descrição',
                   )),
             ),
             const SizedBox(
-              height: 160.0,
+              height: 40.0,
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -89,12 +79,12 @@ class _CropAddState extends State<CropAdd> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     )),
                 onPressed: () {
-                    cropAdded = Crop(name, age, qntOfPlants, true, []);
-                    crops.add(cropAdded);
-                    cropsRep.saveAll(crops);
-                    Navigator.pop(context);
+                  noteAdded = Note(name, description,
+                      DateFormat('yyyy-MM-dd').format(dateAtual).toString());
+                  cropRepos.saveNote(noteAdded, Communicator.currentCrop);
+                  Navigator.pop(context);
                 },
-                child: const Text('Adicionar Cultivo'))
+                child: const Text('Adicionar Observação'))
           ],
         ),
       ),

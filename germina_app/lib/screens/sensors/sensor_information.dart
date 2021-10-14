@@ -121,7 +121,7 @@ Widget bodyFactory(dynamic context) {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Soil Moisture"),
+                const Text("Soil Moisture"),
                 const SizedBox(height: 16.0),
                 Text(
                   "${tmp.dataSoil}%",
