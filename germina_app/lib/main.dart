@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:germina_app/repositories/crops_repository.dart';
 import 'package:germina_app/repositories/sensors_repository.dart';
 import 'package:germina_app/screens/crops/crops.dart';
 import 'package:germina_app/screens/home_page.dart';
@@ -23,8 +24,16 @@ Map<int, Color> color = {
 };
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => SensorsRepository(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<SensorsRepository>(
+        create: (context) => SensorsRepository(),
+      ),
+      ChangeNotifierProvider<CropsRepository>(
+        create: (context) => CropsRepository(),
+      ),
+
+    ],
     child: const MyApp(),
   ));
 }
