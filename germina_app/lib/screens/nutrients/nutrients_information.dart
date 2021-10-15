@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:germina_app/communicator/communicator.dart';
 import 'package:germina_app/constants.dart';
-import 'package:germina_app/models/crop.dart';
-import 'package:germina_app/models/note.dart';
+import 'package:germina_app/models/note_nutrient.dart';
+import 'package:germina_app/models/nutrient.dart';
 import 'package:intl/intl.dart';
 
-class CropInformation extends StatefulWidget {
-  CropInformation({Key? key}) : super(key: key);
+class NutrientInformation extends StatefulWidget {
+  NutrientInformation({Key? key}) : super(key: key);
 
   @override
-  State<CropInformation> createState() => _CropInformationState();
+  State<NutrientInformation> createState() => _NutrientInformationState();
 }
 
-class _CropInformationState extends State<CropInformation> {
-  Crop currentCrop = Communicator.currentCrop;
+class _NutrientInformationState extends State<NutrientInformation> {
+  Nutrient currentNutrient = Communicator.currentNutrient;
 
-  List<Note> notesCrop = Communicator.currentCrop.notesCrop;
+  int qntAdd = 0;
+  double price = 0;
 
-  String nameNote = '';
+  List<NoteNutrient> addNutrientList = [];
 
-  String descriptionNote = '';
-
-  void refreshNotes(Note note) {
+  void refreshNotes(NoteNutrient note) {
     setState(() {
-      Communicator.currentCrop.notesCrop.add(note);
+      addNutrientList.add(note);
     });
   }
 
@@ -33,7 +32,7 @@ class _CropInformationState extends State<CropInformation> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          currentCrop.name,
+          currentNutrient.name,
           style: const TextStyle(color: Colors.white, fontSize: 20.0),
         ),
         backgroundColor: primaryColor,
@@ -73,7 +72,7 @@ class _CropInformationState extends State<CropInformation> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      'Nome: ' + currentCrop.name,
+                      'Nome: ' + currentNutrient.name,
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.w300),
                     ),
@@ -81,7 +80,7 @@ class _CropInformationState extends State<CropInformation> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      'Data de Inserção: ' + currentCrop.age,
+                      'Intervalo: ' + currentNutrient.interval,
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.w300),
                     ),
@@ -89,9 +88,8 @@ class _CropInformationState extends State<CropInformation> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      'Idade do Cultivo : ' +
-                          calculateAge(currentCrop.age) +
-                          ' dias',
+                      'Quantidade Total : ' +
+                          currentNutrient.totalAmount.toString(),
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.w300),
                     ),
@@ -99,8 +97,7 @@ class _CropInformationState extends State<CropInformation> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      'Quantidade de Plantas : ' +
-                          currentCrop.qntOfPlants.toString(),
+                      'Preço : R\$' + currentNutrient.priceMg.toString(),
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.w300),
                     ),
@@ -134,7 +131,7 @@ class _CropInformationState extends State<CropInformation> {
                           ),
                           child: const Center(
                             child: Text(
-                              'Observações',
+                              'Adições',
                               style: TextStyle(
                                   fontSize: 16.0, fontWeight: FontWeight.w500),
                             ),
@@ -156,15 +153,20 @@ class _CropInformationState extends State<CropInformation> {
                               return Column(
                                 children: [
                                   Text(
-                                    'Observação: ' + notesCrop[note].name,
+                                    'Quantidade: ' +
+                                        addNutrientList[note].quantAdd.toString(),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
-                                    'Descrição: ' + notesCrop[note].description,
+                                    'Valor: ' +
+                                        addNutrientList[note].price.toString(),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
-                                    'Data de Cadastro: ' + notesCrop[note].date,
+                                    'Data de Cadastro: ' +
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(addNutrientList[note].date)
+                                            .toString(),
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
@@ -173,7 +175,7 @@ class _CropInformationState extends State<CropInformation> {
                             },
                             padding: const EdgeInsets.all(16),
                             separatorBuilder: (_, __) => const Divider(),
-                            itemCount: notesCrop.length,
+                            itemCount: addNutrientList.length,
                           ),
                         )),
                   ],
@@ -186,7 +188,7 @@ class _CropInformationState extends State<CropInformation> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: () {
-          Note addnote;
+          NoteNutrient addnote;
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -215,31 +217,43 @@ class _CropInformationState extends State<CropInformation> {
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
                                 onChanged: (text) {
-                                  nameNote = (text);
+                                  qntAdd = int.parse(text);
                                 },
                                 decoration: const InputDecoration(
-                                    hintText: 'Nome Observação'),
+                                    hintText: 'quantidade p/ adicionar'),
+                                keyboardType: TextInputType.number,
                               ),
                             ),
                             Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: TextFormField(
                                   onChanged: (text) {
-                                      descriptionNote = text;
+                                    if (text.contains(',')) {
+                                      List<String> priceCorrection =
+                                          text.split(',');
+                                      String priceCorrected =
+                                          priceCorrection[0] +
+                                              '.' +
+                                              priceCorrection[1];
+                                      price = double.parse(priceCorrected);
+                                    } else {
+                                      price = double.parse(text);
+                                    }
                                   },
                                   decoration:
-                                      const InputDecoration(hintText: 'Descrição'),
+                                      const InputDecoration(hintText: 'valor'),
+                                  keyboardType: TextInputType.number,
                                 )),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ElevatedButton(
                                 child: const Text("Adicionar"),
                                 onPressed: () {
-                                  addnote = Note(
-                                      nameNote, descriptionNote, DateFormat('dd-MM-yyyy')
-                                          .format(DateTime.now())
-                                          .toString());
+                                  addnote = NoteNutrient(
+                                      qntAdd, price, DateTime.now());
                                   refreshNotes(addnote);
+                                  currentNutrient.totalAmount =
+                                      currentNutrient.totalAmount + qntAdd;
                                   Navigator.pop(context);
                                 },
                               ),
@@ -253,27 +267,10 @@ class _CropInformationState extends State<CropInformation> {
               });
         },
         child: const Icon(
-          IconData(
-            0xe449,
-            fontFamily: 'MaterialIcons',
-          ),
+          Icons.add,
           color: Colors.white,
         ),
       ),
     );
   }
-}
-
-String calculateAge(final initialAge) {
-  List<String> split = initialAge.toString().split('-');
-  int year, month, day;
-  year = int.parse(split[0]);
-  assert(year is int);
-  month = int.parse(split[1]);
-  assert(month is int);
-  day = int.parse(split[2]);
-  assert(day is int);
-  final atual = DateTime.now();
-  final initial = DateTime(day, month, year);
-  return atual.difference(initial).inDays.toString();
 }

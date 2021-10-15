@@ -35,9 +35,9 @@ class _SensorsPageState extends State<SensorsPage> {
           itemCount: sensors.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 1,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 20),
+              childAspectRatio: 1.4,
+              crossAxisSpacing: 0.1,
+              mainAxisSpacing: 5),
           itemBuilder: (context, index) => SensorView(index, context)),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,

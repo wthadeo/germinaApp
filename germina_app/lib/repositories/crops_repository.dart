@@ -5,8 +5,8 @@ import 'package:germina_app/models/note.dart';
 
 class CropsRepository extends ChangeNotifier {
   static List<Crop> listOfCrops = [
-    Crop('Cultivo X', '2021-10-05', 2, true, []),
-    Crop('Cultivo Y', '2021-08-20', 5, false, [
+    Crop('Cultivo X', '05-10-2021', 2, true, []),
+    Crop('Cultivo Y', '20-08-2021', 5, false, [
       Note('Obs1', 'LoremImpsun LoremIpsum Lorem', '2021-08-23'),
       Note('Obs2', 'LoremImpsun LoremIpsum Lorem', '2021-08-25'),
     ]),

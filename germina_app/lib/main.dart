@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:germina_app/repositories/crops_repository.dart';
+import 'package:germina_app/repositories/irrigations_repository.dart';
+import 'package:germina_app/repositories/nutrients_repository.dart';
 import 'package:germina_app/repositories/sensors_repository.dart';
 import 'package:germina_app/screens/crops/crops.dart';
 import 'package:germina_app/screens/home_page.dart';
@@ -32,7 +34,12 @@ void main() {
       ChangeNotifierProvider<CropsRepository>(
         create: (context) => CropsRepository(),
       ),
-
+      ChangeNotifierProvider<IrrigationsRepository>(
+        create: (context) => IrrigationsRepository(),
+      ),
+      ChangeNotifierProvider<NutrientsRepository>(
+        create: (context) => NutrientsRepository(),
+      ),
     ],
     child: const MyApp(),
   ));

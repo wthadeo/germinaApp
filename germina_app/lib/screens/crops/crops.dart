@@ -35,10 +35,10 @@ class _CropsPageState extends State<CropsPage> {
           itemCount: crops.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 1,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 20),
-          itemBuilder: (context, index) => SensorView(index, context)),
+              childAspectRatio: 1.4,
+              crossAxisSpacing: 0.1,
+              mainAxisSpacing: 5),
+          itemBuilder: (context, index) => CropView(index, context)),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: () {
@@ -52,7 +52,7 @@ class _CropsPageState extends State<CropsPage> {
 }
 
 // ignore: non_constant_identifier_names
-Widget SensorView(int index, dynamic context) {
+Widget CropView(int index, dynamic context) {
   String name = _CropsPageState.crops[index].name;
   bool active = _CropsPageState.crops[index].isActive;
 
