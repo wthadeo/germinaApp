@@ -14,7 +14,8 @@ class Communicator {
       '',
       Crop('', '', 0, false, []),
       Sensor('', '', '', ''),
-      Nutrient('', '', 0, 0.0));
+      Nutrient('', '', 0, 0.0),
+      false);
   static Crop currentCrop = Crop('', '', 0, false, []);
   static Nutrient currentNutrient = Nutrient('', '', 0, 0.0);
   //static Report currentReport;

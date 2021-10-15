@@ -12,7 +12,8 @@ class Irrigation {
   Crop crop;
   Sensor sensor;
   Nutrient nutrient;
+  bool state;
 
   Irrigation(this.name, this.startHour, this.timeToUse, this.flowRate,
-      this.energy, this.crop, this.sensor, this.nutrient);
+      this.energy, this.crop, this.sensor, this.nutrient, this.state);
 }

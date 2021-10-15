@@ -43,7 +43,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
             padding: const EdgeInsets.all(16.0),
             child: Container(
               alignment: Alignment.center,
-              height: 200.0,
+              height: 160.0,
               width: 400.0,
               decoration: BoxDecoration(
                 color: Colors.grey[300],
@@ -80,14 +80,6 @@ class _NutrientInformationState extends State<NutrientInformation> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      'Intervalo: ' + currentNutrient.interval,
-                      style: const TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.w300),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 6.0),
-                    child: Text(
                       'Quantidade Total : ' +
                           currentNutrient.totalAmount.toString(),
                       style: const TextStyle(
@@ -97,7 +89,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      'Preço : R\$' + currentNutrient.priceMg.toString(),
+                      'Valor/mg : R\$' + currentNutrient.priceMg.toString(),
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.w300),
                     ),
@@ -111,7 +103,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
             child: SingleChildScrollView(
               child: Container(
                 alignment: Alignment.center,
-                height: 300.0,
+                height: 340.0,
                 width: 400.0,
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
@@ -142,7 +134,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
                             right: 10.0, left: 10.0, bottom: 10.0),
                         child: Container(
                           alignment: Alignment.center,
-                          height: 220.0,
+                          height: 260.0,
                           width: 400.0,
                           decoration: BoxDecoration(
                             color: Colors.grey[500],
