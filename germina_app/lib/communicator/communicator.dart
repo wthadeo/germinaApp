@@ -6,18 +6,10 @@ import 'package:germina_app/models/hour.dart';
 
 class Communicator {
   static Sensor currentSensor = Sensor('', '', '', '');
-  static Irrigation currentIrrigator = Irrigation(
-      '',
-      Hour(0, 0),
-      0,
-      0,
-      '',
-      Crop('', '', 0, false, []),
-      Sensor('', '', '', ''),
-      Nutrient('', '', 0, 0.0),
-      false);
+  static Irrigation currentIrrigator =
+      Irrigation('', Hour(0, 0), 0, 0, 0, Crop('', '', 0, false, []), [], [], false, []);
   static Crop currentCrop = Crop('', '', 0, false, []);
-  static Nutrient currentNutrient = Nutrient('', '', 0, 0.0);
+  static Nutrient currentNutrient = Nutrient('', 0, 0.0);
   //static Report currentReport;
 
 }

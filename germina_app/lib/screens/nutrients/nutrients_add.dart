@@ -17,7 +17,7 @@ class _NutriendAddState extends State<NutrientAdd> {
   String interval = '';
   int totalAmount = 0;
   double price = 0.0;
-  Nutrient nutrientAdded = Nutrient('', '', 0, 0);
+  Nutrient nutrientAdded = Nutrient('', 0, 0);
   List<Nutrient> nutrients = NutrientsRepository.listOfNutrients;
 
   @override
@@ -48,19 +48,6 @@ class _NutriendAddState extends State<NutrientAdd> {
                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
                     labelText: 'Nome',
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 10.0),
-              child: TextField(
-                  onChanged: (text) {
-                    interval = text;
-                  },
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                    labelText: 'Intervalo',
                   )),
             ),
             Padding(
@@ -110,7 +97,7 @@ class _NutriendAddState extends State<NutrientAdd> {
                     )),
                 onPressed: () {
                   
-                    nutrientAdded = Nutrient(name, interval, totalAmount, price);
+                    nutrientAdded = Nutrient(name, totalAmount, price);
                     nutrients.add(nutrientAdded);
                     nutrientsRep.saveAll(nutrients);
                     Navigator.pop(context);

@@ -4,8 +4,8 @@ import 'package:germina_app/models/nutrient.dart';
 
 class NutrientsRepository extends ChangeNotifier {
   static List<Nutrient> listOfNutrients = [
-    Nutrient('Nutriente X', '20-40', 250, 0.85),
-    Nutrient('Nutriente Y', '60-100', 120, 0.70),
+    Nutrient('Nutriente X', 250, 0.85),
+    Nutrient('Nutriente Y', 120, 0.70),
   ];
 
   UnmodifiableListView<Nutrient> get lista =>

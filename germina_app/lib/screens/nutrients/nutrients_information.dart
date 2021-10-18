@@ -89,7 +89,8 @@ class _NutrientInformationState extends State<NutrientInformation> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      'Valor/mg : R\$' + currentNutrient.priceMg.toString(),
+                      'Valor/mg : R\$' +
+                          currentNutrient.priceMg.toStringAsFixed(2),
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.w300),
                     ),
@@ -146,12 +147,16 @@ class _NutrientInformationState extends State<NutrientInformation> {
                                 children: [
                                   Text(
                                     'Quantidade: ' +
-                                        addNutrientList[note].quantAdd.toString(),
+                                        addNutrientList[note]
+                                            .quantAdd
+                                            .toString(),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     'Valor: ' +
-                                        addNutrientList[note].price.toString(),
+                                        addNutrientList[note]
+                                            .price
+                                            .toStringAsFixed(2),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
@@ -241,11 +246,18 @@ class _NutrientInformationState extends State<NutrientInformation> {
                               child: ElevatedButton(
                                 child: const Text("Adicionar"),
                                 onPressed: () {
+                                  int qntidade =
+                                      currentNutrient.totalAmount + qntAdd;
+                                  double valorPago = recalcValor(
+                                      currentNutrient.totalAmount,
+                                      currentNutrient.priceMg,
+                                      qntAdd,
+                                      price);
                                   addnote = NoteNutrient(
                                       qntAdd, price, DateTime.now());
                                   refreshNotes(addnote);
-                                  currentNutrient.totalAmount =
-                                      currentNutrient.totalAmount + qntAdd;
+                                  currentNutrient.totalAmount = qntidade;
+                                  currentNutrient.priceMg = valorPago;
                                   Navigator.pop(context);
                                 },
                               ),
@@ -265,4 +277,14 @@ class _NutrientInformationState extends State<NutrientInformation> {
       ),
     );
   }
+}
+
+double recalcValor(int a, double b, int c, double d) {
+
+  double valReais = a * b;
+  int qntTotal = a + c;
+  double valTotal = valReais + d;
+  double resultado = valTotal/qntTotal;
+
+  return resultado;
 }

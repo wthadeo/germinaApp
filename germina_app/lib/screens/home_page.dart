@@ -18,14 +18,16 @@ class HomePage extends StatelessWidget {
         ),
         backgroundColor: primaryColor,
       ),
-      body: Column(
-        children: <Widget>[
-          buttonMenu('Sensores', context, '/sensors'),
-          buttonMenu('Irrigações', context, '/irrigations'),
-          buttonMenu('Cultivos', context, '/crops'),
-          buttonMenu('Nutrientes', context, '/nutrients'),
-          buttonMenu('Relatórios', context, '/reports'),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            buttonMenu('Sensores', context, '/sensors'),
+            buttonMenu('Irrigações', context, '/irrigations'),
+            buttonMenu('Cultivos', context, '/crops'),
+            buttonMenu('Nutrientes', context, '/nutrients'),
+            buttonMenu('Relatórios', context, '/reports'),
+          ],
+        ),
       ),
     );
   }

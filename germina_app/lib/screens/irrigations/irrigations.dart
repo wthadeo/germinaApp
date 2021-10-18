@@ -57,6 +57,7 @@ class _IrrigationsPageState extends State<IrrigationsPage> {
 // ignore: non_constant_identifier_names
 Widget IrrigationView(int index, dynamic context) {
   String name = _IrrigationsPageState.irrigations[index].name;
+  bool active = _IrrigationsPageState.irrigations[index].state;
 
   return GestureDetector(
     onTap: () {
@@ -73,15 +74,43 @@ Widget IrrigationView(int index, dynamic context) {
         borderRadius: BorderRadius.circular(15),
       ),
       margin: const EdgeInsets.all(10.0),
-      child: Center(
-        child: Text(
-          name,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 15.0,
+      child:Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            name,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 15.0,
+            ),
           ),
-        ),
+          const SizedBox(height: 15.0,),
+          Text(
+            isActive(active),
+            style: TextStyle(
+              color: activeColor(active),
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+        ],
       ),
     ),
   );
+}
+
+Color activeColor(bool active){
+  if (active) {
+    return Colors.green;
+  } else {
+    return Colors.amber;
+  }
+}
+
+String isActive(bool isActive) {
+  if (isActive) {
+    return "Ativo";
+  } else {
+    return "Completo";
+  }
 }
