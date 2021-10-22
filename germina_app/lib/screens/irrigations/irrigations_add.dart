@@ -37,6 +37,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   Hour hourToStop = Hour(0, 0);
   int flowRate = 0;
   double energyPrice = 0;
+  bool isActive = true;
   
 
   void _selectTime() async {
@@ -215,6 +216,23 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                 },
               ),
             ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.white,
+                      primary: primaryColor,
+                      minimumSize: const Size(30, 30),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      )),
+                  onPressed: () {},
+                  child: const Text('+')),
+              ),
+            ),
             const Padding(
               padding: EdgeInsets.all(10.0),
               child: Text(
@@ -268,8 +286,8 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0, left: 25, right: 25),
-              child: DropdownButton<Crop>(
-                value: cropChoose,
+              child: DropdownButton<Nutrient>(
+                value: nutrientChosed,
                 isExpanded: true,
                 icon: const Icon(Icons.arrow_downward),
                 iconSize: 24,
@@ -279,17 +297,21 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                   height: 2,
                   color: primaryColor,
                 ),
-                items: currentCrops.map((item) {
-                  return DropdownMenuItem<Crop>(
+                items: currentNutrients.map((item) {
+                  return DropdownMenuItem<Nutrient>(
                     child: Text(item.name),
                     value: item,
                   );
                 }).toList(),
-                onChanged: (Crop? newValue) {
+                onChanged: (Nutrient? newValue) {
                   setState(() {
-                    cropChoose = newValue!;
-                    print(cropChoose.name);
+                    nutrientChosed = newValue!;
+                    print(nutrientChosed.name);
                   });
+                  if(!nutrientsChoose.contains(nutrientChosed)){
+                    nutrientsChoose.add(nutrientChosed);
+                    print(nutrientsChoose);
+                  }
                 },
               ),
             ),

@@ -3,10 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:germina_app/models/nutrient.dart';
 
 class NutrientsRepository extends ChangeNotifier {
-  static List<Nutrient> listOfNutrients = [
-    Nutrient('Nutriente X', 250, 0.85),
-    Nutrient('Nutriente Y', 120, 0.70),
-  ];
+  static List<Nutrient> listOfNutrients = [];
 
   UnmodifiableListView<Nutrient> get lista =>
       UnmodifiableListView(listOfNutrients);

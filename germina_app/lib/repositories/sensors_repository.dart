@@ -19,25 +19,6 @@ class SensorsRepository extends ChangeNotifier{
       protocol: 'unknown protocol',
       uri: 'unknown uri',
     ),
-    SoilSensor(
-      20,
-      name: 'sensor_soil2',
-      protocol: 'unknown protocol',
-      uri: 'unknown uri',
-    ),
-    SoilSensor(
-      40,
-      name: 'sensor_soil3',
-      protocol: 'unknown protocol',
-      uri: 'unknown uri',
-    ),
-    TempSensor(
-      36,
-      38,
-      name: 'sensor_temperature1',
-      protocol: 'unknown protocol',
-      uri: 'unknown uri',
-    ),
   ];
 
   UnmodifiableListView<Sensor> get lista => UnmodifiableListView(listOfSensors);

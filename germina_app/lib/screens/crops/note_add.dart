@@ -19,7 +19,7 @@ class _NoteAddState extends State<NoteAdd> {
   String description = '';
   final dateAtual = DateTime.now();
 
-  Note noteAdded = Note('', '', '');
+  Note noteAdded = Note(name:'',description: '',date: '');
   List<Note> notes = Communicator.currentCrop.notesCrop;
 
   @override
@@ -79,8 +79,8 @@ class _NoteAddState extends State<NoteAdd> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     )),
                 onPressed: () {
-                  noteAdded = Note(name, description,
-                      DateFormat('yyyy-MM-dd').format(dateAtual).toString());
+                  noteAdded = Note(name:name,description: description,
+                      date:DateFormat('yyyy-MM-dd').format(dateAtual).toString());
                   cropRepos.saveNote(noteAdded, Communicator.currentCrop);
                   Navigator.pop(context);
                 },

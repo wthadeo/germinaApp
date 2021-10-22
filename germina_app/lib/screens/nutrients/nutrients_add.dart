@@ -3,6 +3,7 @@ import 'package:germina_app/constants.dart';
 import 'package:germina_app/models/nutrient.dart';
 import 'package:germina_app/repositories/nutrients_repository.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class NutrientAdd extends StatefulWidget {
   const NutrientAdd({Key? key}) : super(key: key);
@@ -17,12 +18,13 @@ class _NutriendAddState extends State<NutrientAdd> {
   String interval = '';
   int totalAmount = 0;
   double price = 0.0;
-  Nutrient nutrientAdded = Nutrient('', 0, 0);
+  Nutrient nutrientAdded = Nutrient(name: '', priceMg: 0, totalAmount: 0);
   List<Nutrient> nutrients = NutrientsRepository.listOfNutrients;
+
+  var url = Uri.parse('http://192.168.1.12:3000/nutrients');
 
   @override
   Widget build(BuildContext context) {
-
     nutrientsRep = Provider.of<NutrientsRepository>(context);
 
     return Scaffold(
@@ -67,14 +69,14 @@ class _NutriendAddState extends State<NutrientAdd> {
               padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 10.0),
               child: TextField(
                   onChanged: (text) {
-                    if(text.contains(',')){
+                    if (text.contains(',')) {
                       List<String> priceCorrection = text.split(',');
-                      String priceCorrected = priceCorrection[0] + '.' + priceCorrection[1];
+                      String priceCorrected =
+                          priceCorrection[0] + '.' + priceCorrection[1];
                       price = double.parse(priceCorrected);
                     } else {
                       price = double.parse(text);
                     }
-                    
                   },
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
@@ -95,12 +97,12 @@ class _NutriendAddState extends State<NutrientAdd> {
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     )),
-                onPressed: () {
-                  
-                    nutrientAdded = Nutrient(name, totalAmount, price);
-                    nutrients.add(nutrientAdded);
-                    nutrientsRep.saveAll(nutrients);
-                    Navigator.pop(context);
+                onPressed: () async {
+                  nutrientAdded = Nutrient(name: name, totalAmount: totalAmount, priceMg: price);
+                  nutrients.add(nutrientAdded);
+                  http.Response saveToDB = await saveToDb(nutrientAdded, url);
+                  nutrientsRep.saveAll(nutrients);
+                  Navigator.pop(context);
                 },
                 child: const Text('Adicionar Nutriente'))
           ],
@@ -109,3 +111,14 @@ class _NutriendAddState extends State<NutrientAdd> {
     );
   }
 }
+
+Future<http.Response> saveToDb(Nutrient nutrient, var url) async {
+  final http.Response response =
+      await http.post(url, body: {
+        'name': nutrient.name,
+        'price': nutrient.priceMg.toString(),
+        'totalAmount': nutrient.totalAmount.toString()
+      });
+  return response;
+}
+

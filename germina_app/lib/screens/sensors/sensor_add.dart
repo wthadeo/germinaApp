@@ -19,7 +19,7 @@ class _SensorAddState extends State<SensorAdd> {
   String protocol = '';
   String uri = '';
   Sensor sensorAdded =
-      Sensor('', '', '', ''); //Sensor que será adicionado a lista de sensores
+      Sensor(name:'', protocol: '', uri: '', category: ''); //Sensor que será adicionado a lista de sensores
   List<Sensor> sensors = SensorsRepository.listOfSensors;
   String dropdownValue = 'Tipo de Sensor';
 

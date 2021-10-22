@@ -1,8 +1,15 @@
-class Nutrient{
+class Nutrient {
   String name;
-  int totalAmount;
   double priceMg;
+  int totalAmount;
 
-  Nutrient(this.name,this.totalAmount, this.priceMg);
+  Nutrient(
+      {required this.name, required this.priceMg, required this.totalAmount});
 
+  factory Nutrient.fromJson(Map<String, dynamic> json) {
+    return Nutrient(
+        name: json['name'] as String,
+        priceMg:json['price'].toDouble(),
+        totalAmount: json['totalAmount'] as int);
+  }
 }

@@ -8,5 +8,5 @@ class SoilSensor extends Sensor {
       required String protocol,
       required String uri,
       String category = 'soilSensor'})
-      : super(name, protocol, uri, category);
+      : super(name: name,protocol: protocol,uri: uri,category: category);
 }

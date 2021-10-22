@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:germina_app/communicator/communicator.dart';
 import 'package:germina_app/constants.dart';
@@ -5,6 +6,7 @@ import 'package:germina_app/models/crop.dart';
 import 'package:germina_app/repositories/crops_repository.dart';
 import 'package:germina_app/screens/crops/crop_add.dart';
 import 'package:germina_app/screens/crops/crop_information.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 class CropsPage extends StatefulWidget {
@@ -17,6 +19,8 @@ class CropsPage extends StatefulWidget {
 class _CropsPageState extends State<CropsPage> {
   late CropsRepository cropRep;
   static List<Crop> crops = CropsRepository.listOfCrops;
+
+  var url = Uri.parse('http://192.168.1.12:3000/crops');
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +35,25 @@ class _CropsPageState extends State<CropsPage> {
         ),
         backgroundColor: primaryColor,
       ),
-      body: GridView.builder(
-          itemCount: crops.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1.4,
-              crossAxisSpacing: 0.1,
-              mainAxisSpacing: 5),
-          itemBuilder: (context, index) => CropView(index, context)),
+      body: FutureBuilder(
+        future: getCrops(url),
+        builder:
+              (BuildContext context, AsyncSnapshot<List<Crop>> snapshot) {
+            if (snapshot.hasData) {
+              crops = snapshot.data!;
+              return GridView.builder(
+            itemCount: crops.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1.4,
+                crossAxisSpacing: 0.1,
+                mainAxisSpacing: 5),
+            itemBuilder: (context, index) => CropView(index, context));
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }}),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: () {
@@ -58,7 +73,7 @@ Widget CropView(int index, dynamic context) {
 
   return GestureDetector(
     onTap: () {
-      Communicator.currentCrop = CropsRepository.listOfCrops[index];
+      Communicator.currentCrop = _CropsPageState.crops[index];
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => CropInformation()));
     },
@@ -95,6 +110,25 @@ Widget CropView(int index, dynamic context) {
     ),
   );
 }
+
+Future<List<Crop>> getCrops(var url) async {
+  http.Response res = await http.get((url));
+
+  if (res.statusCode == 200) {
+    List<dynamic> body = jsonDecode(res.body);
+
+    List<Crop> crops = body
+        .map(
+          (dynamic item) => Crop.fromJson(item),
+        )
+        .toList();
+
+    return crops;
+  } else {
+    throw "Unable to retrieve crops.";
+  }
+}
+
 
 Color activeColor(bool active){
   if (active) {

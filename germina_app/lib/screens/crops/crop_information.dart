@@ -236,7 +236,7 @@ class _CropInformationState extends State<CropInformation> {
                                 child: const Text("Adicionar"),
                                 onPressed: () {
                                   addnote = Note(
-                                      nameNote, descriptionNote, DateFormat('dd-MM-yyyy')
+                                      name: nameNote,description: descriptionNote, date: DateFormat('dd-MM-yyyy')
                                           .format(DateTime.now())
                                           .toString());
                                   refreshNotes(addnote);

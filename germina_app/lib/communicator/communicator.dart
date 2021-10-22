@@ -5,11 +5,24 @@ import 'package:germina_app/models/irrigation.dart';
 import 'package:germina_app/models/hour.dart';
 
 class Communicator {
-  static Sensor currentSensor = Sensor('', '', '', '');
-  static Irrigation currentIrrigator =
-      Irrigation('', Hour(0, 0), 0, 0, 0, Crop('', '', 0, false, []), [], [], false, []);
-  static Crop currentCrop = Crop('', '', 0, false, []);
-  static Nutrient currentNutrient = Nutrient('', 0, 0.0);
+  static Sensor currentSensor =
+      Sensor(name: '', protocol: '', uri: '', category: '');
+  static Irrigation currentIrrigator = Irrigation(
+      name: '',
+      startHour: Hour(0, 0),
+      timeToUse: 0,
+      flowRate: 0,
+      energy: 0,
+      crop: Crop(
+          name: '', age: '', qntOfPlants: 0, isActive: false, notesCrop: []),
+      sensor: [],
+      nutrient: [],
+      state: false,
+      listOfNotifications: []);
+  static Crop currentCrop =
+      Crop(name: '', age: '', qntOfPlants: 0, isActive: false, notesCrop: []);
+  static Nutrient currentNutrient =
+      Nutrient(name: '', priceMg: 0.0, totalAmount: 0);
   //static Report currentReport;
 
 }
