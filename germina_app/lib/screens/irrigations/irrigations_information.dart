@@ -83,7 +83,7 @@ class _IrrigationInformationState extends State<IrrigationInformation> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: Text(
-                        'Cultivo: ' + currentIrrigation.crop.name,
+                        'Cultivo: ' + listOf(currentIrrigation.crop),
                         style: const TextStyle(
                             fontSize: 18.0, fontWeight: FontWeight.w300),
                       ),

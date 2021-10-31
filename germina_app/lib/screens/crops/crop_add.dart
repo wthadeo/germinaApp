@@ -101,7 +101,8 @@ class _CropAddState extends State<CropAdd> {
                       isActive: true,
                       notesCrop: []);
                   crops.add(cropAdded);
-                  http.Response saveToDB = await saveToDb(cropAdded, url);
+                  http.Response saveToDB =
+                      await saveToDb(json.encode(cropAdded.toJson()), url);
                   cropsRep.saveAll(crops);
                   Navigator.pop(context);
                 },
@@ -113,14 +114,12 @@ class _CropAddState extends State<CropAdd> {
   }
 }
 
-Future<http.Response> saveToDb(Crop crop, var url) async {
-  final http.Response response = await http.post(url, body: {
-    'name': crop.name,
-    'age': crop.age.toString(),
-    'qntOfPlants': crop.qntOfPlants.toString(),
-    'isActive': crop.isActive.toString(),
-    'notesCrop': ''
-  });
+Future<http.Response> saveToDb(String crop, var url) async {
+  final http.Response response = await http.post(url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: crop);
   return response;
 }
 

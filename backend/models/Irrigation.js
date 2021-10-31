@@ -2,12 +2,13 @@ const mongoose = require('mongoose');
 
 const irrigationSchema = new mongoose.Schema({
   name: String,
-  startHour: { hour: Number, minutes: Number },
+  startHour: Number,
+  startMinutes: Number,
   timeToUse: Number,
   flowRate: Number,
   energy: Number,
   crop:
-    {
+    [{
       name: String,
       age: String,
       qntOfPlants: Number,
@@ -17,7 +18,7 @@ const irrigationSchema = new mongoose.Schema({
           description: String,
           date: String
       }]
-    },
+    }],
   sensor: [{
     name: String,
     protocol: String,

@@ -19,7 +19,6 @@ app.use(express.urlencoded())
 app.use(express.json());
 
 app.get('/nutrients', (req, res) => {
-    console.log(res.body)
     Nutrient.find().then(nutrients => {
         res.json(nutrients);
     }).catch(error => {
@@ -50,7 +49,6 @@ app.put('/nutrients', (req, res) => {
 });
 
 app.get('/crops', (req, res) => {
-    console.log(res.body)
     Crop.find().then(crops => {
         res.json(crops);
     }).catch(error => {
@@ -59,17 +57,11 @@ app.get('/crops', (req, res) => {
 });
 
 app.post('/crops', (req, res) => {
-    console.log(req.body);
     let name = req.body.name;
     let age = req.body.age;
     let qntOfPlants = req.body.qntOfPlants;
     let isActive = req.body.isActive;
-    let notesCrop;
-    if (req.body.notesCrop === '') {
-        notesCrop = [];
-    } else {
-        notesCrop = JSON.parse(req.body.notesCrop);
-    }
+    let notesCrop = req.body.notesCrop;
 
     let newCrop = new Crop({
         name, age, qntOfPlants, isActive, notesCrop
@@ -84,7 +76,6 @@ app.post('/crops', (req, res) => {
 });
 
 app.get('/irrigations', (req, res) => {
-    console.log(res.body)
     Irrigation.find().then(irrigations => {
         res.json(irrigations);
     }).catch(error => {
@@ -96,6 +87,7 @@ app.post('/irrigations', (req, res) => {
     console.log(req.body);
     let name = req.body.name;
     let startHour = req.body.startHour;
+    let startMinutes = req.body.startMinutes;
     let timeToUse = req.body.timeToUse;
     let flowRate = req.body.flowRate;
     let energy = req.body.energy;
@@ -108,6 +100,7 @@ app.post('/irrigations', (req, res) => {
     let newIrrigation = new Irrigation({
         name,
         startHour,
+        startMinutes,
         timeToUse,
         flowRate,
         energy,

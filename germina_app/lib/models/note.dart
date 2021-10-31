@@ -6,10 +6,23 @@ class Note{
 
   Note({required this.name, required this.description, required this.date});
 
-  factory Note.fromJson(dynamic json) {
+  @override
+  toString(){
+    return "{\"name\":" +  "\"$name\"," + "\"description\":" +  "\"$description\"," + "\"date\":" + "\"$date\"}";
+  }
+
+  factory Note.fromJson(Map<String, dynamic> json) {
     return Note(
-        name: json['name'] as String,
-        description: json['description'] as String,
-        date: json['date'] as String);
+        name: json['name'],
+        description: json['description'],
+        date: json['date']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = name;
+    data['description'] = description;
+    data['date'] = date;
+    return data;
   }
 }

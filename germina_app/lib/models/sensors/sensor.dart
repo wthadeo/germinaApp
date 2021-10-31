@@ -10,13 +10,21 @@ class Sensor {
       required this.uri,
       required this.category});
 
-  factory Sensor.fromJson(dynamic json) {
+  factory Sensor.fromJson(Map<String, dynamic> json) {
     return Sensor(
-        name: json['name'] as String,
-        protocol: json['protocol'] as String,
-        uri: json['uri'] as String,
-        category: json['category'] as String
-        );
+        name: json['name'],
+        protocol: json['protocol'],
+        uri: json['uri'],
+        category: json['category']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = name;
+    data['protocol'] = protocol;
+    data['uri'] = uri;
+    data['category'] = category;
+    return data;
   }
 
 }

@@ -6,11 +6,19 @@ class Notification{
 
   Notification({required this.name, required this.description, required this.date});
 
-  factory Notification.fromJson(dynamic json) {
+  factory Notification.fromJson(Map<String, dynamic> json) {
     return Notification(
-        name: json['name'] as String,
-        description: json['description'] as String,
-        date: json['date'] as String);
+        name: json['name'],
+        description: json['description'],
+        date: json['date']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = name;
+    data['description'] = description;
+    data['date'] = date;
+    return data;
   }
   
 

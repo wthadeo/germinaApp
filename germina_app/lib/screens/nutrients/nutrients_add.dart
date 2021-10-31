@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:germina_app/constants.dart';
 import 'package:germina_app/models/nutrient.dart';
@@ -98,9 +99,11 @@ class _NutriendAddState extends State<NutrientAdd> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     )),
                 onPressed: () async {
-                  nutrientAdded = Nutrient(name: name, totalAmount: totalAmount, priceMg: price);
+                  nutrientAdded = Nutrient(
+                      name: name, totalAmount: totalAmount, priceMg: price);
                   nutrients.add(nutrientAdded);
-                  http.Response saveToDB = await saveToDb(nutrientAdded, url);
+                  http.Response saveToDB =
+                      await saveToDb(json.encode(nutrientAdded.toJson()), url);
                   nutrientsRep.saveAll(nutrients);
                   Navigator.pop(context);
                 },
@@ -112,13 +115,11 @@ class _NutriendAddState extends State<NutrientAdd> {
   }
 }
 
-Future<http.Response> saveToDb(Nutrient nutrient, var url) async {
-  final http.Response response =
-      await http.post(url, body: {
-        'name': nutrient.name,
-        'price': nutrient.priceMg.toString(),
-        'totalAmount': nutrient.totalAmount.toString()
-      });
+Future<http.Response> saveToDb(String nutrient, var url) async {
+  final http.Response response = await http.post(url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: nutrient);
   return response;
 }
-

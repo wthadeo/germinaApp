@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:germina_app/repositories/crops_repository.dart';
+import 'package:germina_app/repositories/irrigations_repository.dart';
+import 'package:germina_app/repositories/nutrients_repository.dart';
 
 import '../constants.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  //final String title;
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var urlIrrigations = Uri.parse('http://192.168.1.12:3000/irrigations');
+  var urlCrops = Uri.parse('http://192.168.1.12:3000/crops');
+  var urlNutrients = Uri.parse('http://192.168.1.12:3000/nutrients');
+
+  late final dataFromApi;
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +30,35 @@ class HomePage extends StatelessWidget {
         ),
         backgroundColor: primaryColor,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            buttonMenu('Sensores', context, '/sensors'),
-            buttonMenu('Irrigações', context, '/irrigations'),
-            buttonMenu('Cultivos', context, '/crops'),
-            buttonMenu('Nutrientes', context, '/nutrients'),
-            buttonMenu('Relatórios', context, '/reports'),
-          ],
-        ),
+      body: FutureBuilder(
+        future: dataFromApi = Future.wait([
+          IrrigationsRepository.getIrrigationsFromApi(urlIrrigations),
+          CropsRepository.getCropsFromApi(urlCrops),
+          NutrientsRepository.getNutrientsFromApi(urlNutrients)
+        ]),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+          if (snapshot.hasData) {
+            IrrigationsRepository.listOfIrrigations = snapshot.data?[0]!;
+            CropsRepository.listOfCrops = snapshot.data?[1]!;
+            NutrientsRepository.listOfNutrients = snapshot.data?[2]!;
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  buttonMenu('Sensores', context, '/sensors'),
+                  buttonMenu('Cultivos', context, '/crops'),
+                  buttonMenu('Nutrientes', context, '/nutrients'),
+                  buttonMenu('Irrigações', context, '/irrigations'),
+                  buttonMenu('Relatórios', context, '/reports'),
+                ],
+              ),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }

@@ -1,13 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:germina_app/constants.dart';
 import 'package:germina_app/models/crop.dart';
 import 'package:germina_app/models/hour.dart';
+import 'package:germina_app/models/irrigation.dart';
 import 'package:germina_app/models/nutrient.dart';
 import 'package:germina_app/models/sensors/sensor.dart';
 import 'package:germina_app/repositories/crops_repository.dart';
 import 'package:germina_app/repositories/irrigations_repository.dart';
 import 'package:germina_app/repositories/nutrients_repository.dart';
 import 'package:germina_app/repositories/sensors_repository.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -23,22 +26,27 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   List<Crop> currentCrops = CropsRepository.listOfCrops;
   List<Sensor> currentSensors = SensorsRepository.listOfSensors;
   List<Nutrient> currentNutrients = NutrientsRepository.listOfNutrients;
-  late Crop cropChoose = currentCrops[0];
+  late Crop cropChoosed = currentCrops[0];
   late Sensor sensorChosed = currentSensors[0];
   late Nutrient nutrientChosed = currentNutrients[0];
+  List<Crop> cropsChoose = [];
   List<Sensor> sensorsChoose = [];
   List<Nutrient> nutrientsChoose = [];
-  
+  //************************************************************* */
   String name = '';
   TimeOfDay initialHour = TimeOfDay(
       hour: int.parse(DateFormat('hh').format(DateTime.now())),
       minute: int.parse(DateFormat('mm').format(DateTime.now())));
   int minutesActive = 0;
-  Hour hourToStop = Hour(0, 0);
+  static Hour hourToStop = Hour(hour: 0, minutes: 0);
   int flowRate = 0;
   double energyPrice = 0;
   bool isActive = true;
-  
+  late Irrigation irrigationAdded;
+  List<Irrigation> irrigations = IrrigationsRepository.listOfIrrigations;
+
+  var url = Uri.parse('http://192.168.1.12:3000/irrigations');
+  //************************************************************* */
 
   void _selectTime() async {
     final TimeOfDay? newTime = await showTimePicker(
@@ -192,7 +200,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0, left: 25, right: 25),
               child: DropdownButton<Crop>(
-                value: cropChoose,
+                value: cropChoosed,
                 isExpanded: true,
                 icon: const Icon(Icons.arrow_downward),
                 iconSize: 24,
@@ -210,9 +218,13 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                 }).toList(),
                 onChanged: (Crop? newValue) {
                   setState(() {
-                    cropChoose = newValue!;
-                    print(cropChoose.name);
+                    cropChoosed = newValue!;
+                    print(cropChoosed.name);
                   });
+                  if (!cropsChoose.contains(cropChoosed)) {
+                    cropsChoose.add(cropChoosed);
+                    print(cropsChoose);
+                  }
                 },
               ),
             ),
@@ -221,16 +233,16 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      onPrimary: Colors.white,
-                      primary: primaryColor,
-                      minimumSize: const Size(30, 30),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      )),
-                  onPressed: () {},
-                  child: const Text('+')),
+                    style: ElevatedButton.styleFrom(
+                        onPrimary: Colors.white,
+                        primary: primaryColor,
+                        minimumSize: const Size(30, 30),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        )),
+                    onPressed: () {},
+                    child: const Text('+')),
               ),
             ),
             const Padding(
@@ -267,7 +279,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                     sensorChosed = newValue!;
                     print(sensorChosed.name);
                   });
-                  if(!sensorsChoose.contains(sensorChosed)){
+                  if (!sensorsChoose.contains(sensorChosed)) {
                     sensorsChoose.add(sensorChosed);
                     print(sensorsChoose);
                   }
@@ -308,14 +320,14 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                     nutrientChosed = newValue!;
                     print(nutrientChosed.name);
                   });
-                  if(!nutrientsChoose.contains(nutrientChosed)){
+                  if (!nutrientsChoose.contains(nutrientChosed)) {
                     nutrientsChoose.add(nutrientChosed);
                     print(nutrientsChoose);
                   }
                 },
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             ElevatedButton(
@@ -327,7 +339,26 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     )),
-                onPressed: () {},
+                onPressed: () async {
+                  irrigationAdded = Irrigation(
+                      name: name,
+                      startHour: initialHour.hour,
+                      startMinutes: initialHour.minute,
+                      timeToUse: minutesActive,
+                      //fazer os calculos dos minutos e inicializar a hora de parar aqui
+                      flowRate: flowRate,
+                      energy: energyPrice,
+                      crop: cropsChoose,
+                      sensor: sensorsChoose,
+                      nutrient: nutrientsChoose,
+                      state: true,
+                      listOfNotifications: []);
+                  irrigations.add(irrigationAdded);
+                  http.Response saveToDB = await saveToDb(
+                      json.encode(irrigationAdded.toJson()), url);
+                  irrigationsRep.saveAll(irrigations);
+                  Navigator.pop(context);
+                },
                 child: const Text('Agendar Irrigação'))
           ],
         ),
@@ -336,7 +367,16 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   }
 }
 
+Future<http.Response> saveToDb(String irrigation, var url) async {
+  final http.Response response = await http.post(url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: irrigation);
+  return response;
+}
 
+buildDropButtons() {}
 
 
 /*

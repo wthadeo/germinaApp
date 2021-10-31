@@ -8,8 +8,17 @@ class Nutrient {
 
   factory Nutrient.fromJson(Map<String, dynamic> json) {
     return Nutrient(
-        name: json['name'] as String,
-        priceMg:json['price'].toDouble(),
-        totalAmount: json['totalAmount'] as int);
+        name: json['name'],
+        priceMg: json['price'],
+        totalAmount: json['totalAmount']);
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = name;
+    data['price'] = priceMg;
+    data['totalAmount'] = totalAmount;
+    return data;
+  }
+
 }
