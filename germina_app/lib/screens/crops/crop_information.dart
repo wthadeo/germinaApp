@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:germina_app/communicator/communicator.dart';
 import 'package:germina_app/constants.dart';
 import 'package:germina_app/models/crop.dart';
 import 'package:germina_app/models/note.dart';
+import 'package:germina_app/repositories/crops_repository.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CropInformation extends StatefulWidget {
   CropInformation({Key? key}) : super(key: key);
@@ -13,13 +18,24 @@ class CropInformation extends StatefulWidget {
 }
 
 class _CropInformationState extends State<CropInformation> {
+  late CropsRepository cropsRep;
   Crop currentCrop = Communicator.currentCrop;
 
   List<Note> notesCrop = Communicator.currentCrop.notesCrop;
-
   String nameNote = '';
-
   String descriptionNote = '';
+
+  var urlConclude = Uri.parse('http://192.168.1.12:3000/crops/conclude');
+  var urlNote = Uri.parse('http://192.168.1.12:3000/crops/addNote');
+
+  Future<http.Response> editCropDb(String crop, var url) async {
+    final http.Response response = await http.put(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: crop);
+    return response;
+  }
 
   void refreshNotes(Note note) {
     setState(() {
@@ -27,8 +43,79 @@ class _CropInformationState extends State<CropInformation> {
     });
   }
 
+  Widget finishButton(Crop currentCrop, var url) {
+    if (currentCrop.isActive) {
+      return ElevatedButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: Stack(
+                    clipBehavior: Clip.hardEdge,
+                    children: [
+                      Form(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'Deseja realmente concluir o cultivo? Esta opção será permanente!',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton(
+                                    child: const Text("Sim"),
+                                    onPressed: () async {
+                                      http.Response edit = await editCropDb(
+                                          json.encode(currentCrop.toJson()),
+                                          url);
+                                      setState(() {
+                                        Communicator.currentCrop.isActive =
+                                            false;
+                                      });
+                                      cropsRep.refreshAll();
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  ElevatedButton(
+                                    child: const Text("Não"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              });
+        },
+        child: const Text('Concluir Cultivo'),
+      );
+    } else {
+      return const ElevatedButton(
+        onPressed: null,
+        child: Text('Cultivo Concluído'),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    cropsRep = Provider.of<CropsRepository>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -64,7 +151,7 @@ class _CropInformationState extends State<CropInformation> {
                         ),
                         child: const Center(
                           child: Text(
-                            'Info',
+                            'Informações',
                             style: TextStyle(
                                 fontSize: 16.0, fontWeight: FontWeight.w500),
                           ),
@@ -109,6 +196,7 @@ class _CropInformationState extends State<CropInformation> {
               ),
             ),
           ),
+          finishButton(Communicator.currentCrop, urlConclude),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: SingleChildScrollView(
@@ -225,21 +313,27 @@ class _CropInformationState extends State<CropInformation> {
                                 padding: EdgeInsets.all(8.0),
                                 child: TextFormField(
                                   onChanged: (text) {
-                                      descriptionNote = text;
+                                    descriptionNote = text;
                                   },
-                                  decoration:
-                                      const InputDecoration(hintText: 'Descrição'),
+                                  decoration: const InputDecoration(
+                                      hintText: 'Descrição'),
                                 )),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ElevatedButton(
                                 child: const Text("Adicionar"),
-                                onPressed: () {
+                                onPressed: () async {
                                   addnote = Note(
-                                      name: nameNote,description: descriptionNote, date: DateFormat('dd-MM-yyyy')
+                                      name: nameNote,
+                                      description: descriptionNote,
+                                      date: DateFormat('dd-MM-yyyy')
                                           .format(DateTime.now())
                                           .toString());
                                   refreshNotes(addnote);
+                                  http.Response editCrop = await editCropDb(
+                                          json.encode(currentCrop.toJson()),
+                                          urlNote);
+                                  cropsRep.refreshAll();
                                   Navigator.pop(context);
                                 },
                               ),

@@ -38,6 +38,10 @@ class IrrigationsRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  refreshAll(){
+    notifyListeners();
+  }
+
   remove(Irrigation irrigation) {
     listOfIrrigations.remove(irrigation);
     notifyListeners();

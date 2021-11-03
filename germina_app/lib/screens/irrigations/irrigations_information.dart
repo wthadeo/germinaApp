@@ -99,7 +99,7 @@ class _IrrigationInformationState extends State<IrrigationInformation> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: Text(
-                        'Energia: ' + currentIrrigation.energy.toString() + ' kWh',
+                        'Energia: R\$' + currentIrrigation.energy.toStringAsFixed(2) + ' kWh',
                         style: const TextStyle(
                             fontSize: 18.0, fontWeight: FontWeight.w300),
                       ),

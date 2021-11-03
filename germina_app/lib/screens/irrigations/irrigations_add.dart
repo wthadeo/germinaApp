@@ -33,7 +33,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   List<Sensor> sensorsChoose = [];
   List<Nutrient> nutrientsChoose = [];
   //************************************************************* */
-  String name = '';
+  String name = 'New Irrigation';
   TimeOfDay initialHour = TimeOfDay(
       hour: int.parse(DateFormat('hh').format(DateTime.now())),
       minute: int.parse(DateFormat('mm').format(DateTime.now())));
@@ -44,8 +44,10 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   bool isActive = true;
   late Irrigation irrigationAdded;
   List<Irrigation> irrigations = IrrigationsRepository.listOfIrrigations;
+  String initialHourText = "Horário de Início";
 
   var url = Uri.parse('http://192.168.1.12:3000/irrigations');
+  var urlUpdateNutrients = Uri.parse('http://192.168.1.12:3000/nutrients');
   //************************************************************* */
 
   void _selectTime() async {
@@ -53,10 +55,35 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
       context: context,
       initialTime: initialHour,
     );
-    if (newTime != null) {
+    if (newTime != null &&
+        newTime.hour.toDouble() * 60 + newTime.minute.toDouble() >
+            initialHour.hour.toDouble() * 60 + initialHour.minute.toDouble()) {
       setState(() {
         initialHour = newTime;
+        initialHourText =
+            "${newTime.hour.toString().padLeft(2, '0')}:${newTime.minute.toString().padLeft(2, '0')}";
       });
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Horário Inválido"),
+            content: const Text(
+                "Horario de inicio deve ser maior que o atual"),
+            actions: <Widget>[
+              // define os botões na base do dialogo
+              TextButton(
+                child: const Text("Fechar"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _selectTime();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -77,11 +104,11 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
         child: Column(
           children: [
             Padding(
+              //NOME DA IRRIGAÇÃO
               padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 10.0),
               child: TextField(
                   onChanged: (text) {
                     name = text;
-                    print(initialHour.toString());
                   },
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
@@ -102,8 +129,8 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15.0),
                       child: ElevatedButton(
+                        child: Text(initialHourText),
                         onPressed: _selectTime,
-                        child: const Text('Hora Início'),
                         style: ElevatedButton.styleFrom(
                             onPrimary: const Color.fromRGBO(255, 255, 255, 1),
                             minimumSize: const Size(140, 50),
@@ -228,23 +255,6 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                 },
               ),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        onPrimary: Colors.white,
-                        primary: primaryColor,
-                        minimumSize: const Size(30, 30),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        )),
-                    onPressed: () {},
-                    child: const Text('+')),
-              ),
-            ),
             const Padding(
               padding: EdgeInsets.all(10.0),
               child: Text(
@@ -353,6 +363,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                       nutrient: nutrientsChoose,
                       state: true,
                       listOfNotifications: []);
+                  //atualizar os nutrientes, diminuindo a quantidade de nutrientes gastos aqui
                   irrigations.add(irrigationAdded);
                   http.Response saveToDB = await saveToDb(
                       json.encode(irrigationAdded.toJson()), url);
@@ -376,10 +387,38 @@ Future<http.Response> saveToDb(String irrigation, var url) async {
   return response;
 }
 
+Future<http.Response> editDb(String object, var url) async {
+  final http.Response response = await http.put(url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: object);
+  return response;
+}
+
+
 buildDropButtons() {}
 
-
 /*
+Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        onPrimary: Colors.white,
+                        primary: primaryColor,
+                        minimumSize: const Size(30, 30),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        )),
+                    onPressed: () {},
+                    child: const Text('+')),
+              ),
+            ),
+
+
   SizedBox(height: 100,),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(

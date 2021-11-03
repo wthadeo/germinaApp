@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:germina_app/communicator/communicator.dart';
 import 'package:germina_app/constants.dart';
 import 'package:germina_app/models/note_nutrient.dart';
 import 'package:germina_app/models/nutrient.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class NutrientInformation extends StatefulWidget {
@@ -19,6 +22,17 @@ class _NutrientInformationState extends State<NutrientInformation> {
   double price = 0;
 
   List<NoteNutrient> addNutrientList = [];
+
+  var url = Uri.parse('http://192.168.1.12:3000/nutrients');
+
+  Future<http.Response> editNutrientDb(String crop, var url) async {
+    final http.Response response = await http.put(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: crop);
+    return response;
+  }
 
   void refreshNotes(NoteNutrient note) {
     setState(() {
@@ -193,19 +207,6 @@ class _NutrientInformationState extends State<NutrientInformation> {
                   content: Stack(
                     clipBehavior: Clip.hardEdge,
                     children: <Widget>[
-                      Positioned(
-                        right: -40.0,
-                        top: -40.0,
-                        child: InkResponse(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const CircleAvatar(
-                            child: Icon(Icons.close),
-                            backgroundColor: Colors.red,
-                          ),
-                        ),
-                      ),
                       Form(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -245,7 +246,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
                               padding: const EdgeInsets.all(8.0),
                               child: ElevatedButton(
                                 child: const Text("Adicionar"),
-                                onPressed: () {
+                                onPressed: () async {
                                   int qntidade =
                                       currentNutrient.totalAmount + qntAdd;
                                   double valorPago = recalcValor(
@@ -258,6 +259,9 @@ class _NutrientInformationState extends State<NutrientInformation> {
                                   refreshNotes(addnote);
                                   currentNutrient.totalAmount = qntidade;
                                   currentNutrient.priceMg = valorPago;
+                                  http.Response editNutrient = await editNutrientDb(
+                                          json.encode(currentNutrient.toJson()),
+                                          url);
                                   Navigator.pop(context);
                                 },
                               ),

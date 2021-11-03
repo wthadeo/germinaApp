@@ -37,6 +37,10 @@ class NutrientsRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  refreshAll(){
+    notifyListeners();
+  }
+
   remove(Nutrient nutrient) {
     listOfNutrients.remove(nutrient);
     notifyListeners();

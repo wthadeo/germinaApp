@@ -35,6 +35,10 @@ class CropsRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  refreshAll(){
+    notifyListeners();
+  }
+
   saveNote(Note note, Crop currentCrop) {
     currentCrop.notesCrop.add(note);
     notifyListeners();

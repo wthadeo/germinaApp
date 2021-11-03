@@ -30,6 +30,10 @@ class SensorsRepository extends ChangeNotifier{
     notifyListeners();
   }
 
+  refreshAll(){
+    notifyListeners();
+  }
+
   remove(Sensor sensor){
     listOfSensors.remove(sensor);
     notifyListeners();

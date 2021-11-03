@@ -45,7 +45,34 @@ app.post('/nutrients', (req, res) => {
 });
 
 app.put('/nutrients', (req, res) => {
+    Nutrient.findOne({name: req.body.name}).then(nutrient=>{
+        nutrient.price = req.body.price;
+        nutrient.totalAmount = req.body.totalAmount;
+        nutrient.save();
+        res.send(nutrient);
+    }).catch(error => {
+        res.send('Erro ao carregar o cultivo');
+    });
+});
 
+app.put('/crops/conclude', (req, res) => {
+    Crop.findOne({name: req.body.name}).then(crop=>{
+        crop.isActive = false;
+        crop.save();
+        res.send(crop);
+    }).catch(error => {
+        res.send('Erro ao carregar o cultivo');
+    });
+});
+
+app.put('/crops/addNote', (req, res) => {
+    Crop.findOne({name: req.body.name}).then(crop=>{
+        crop.notesCrop = req.body.notesCrop;
+        crop.save();
+        res.send(crop);
+    }).catch(error => {
+        res.send('Erro ao carregar o cultivo');
+    });
 });
 
 app.get('/crops', (req, res) => {
