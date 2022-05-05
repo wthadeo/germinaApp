@@ -23,7 +23,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
 
   List<NoteNutrient> addNutrientList = [];
 
-  var url = Uri.parse('http://192.168.1.12:3000/nutrients');
+  var url = Uri.parse('http://192.168.0.113:3000/nutrients');
 
   Future<http.Response> editNutrientDb(String crop, var url) async {
     final http.Response response = await http.put(url,

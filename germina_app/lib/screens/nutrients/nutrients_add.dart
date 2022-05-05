@@ -22,7 +22,7 @@ class _NutriendAddState extends State<NutrientAdd> {
   Nutrient nutrientAdded = Nutrient(name: '', priceMg: 0, totalAmount: 0);
   List<Nutrient> nutrients = NutrientsRepository.listOfNutrients;
 
-  var url = Uri.parse('http://192.168.1.12:3000/nutrients');
+  var url = Uri.parse('http://192.168.0.113:3000/nutrients');
 
   @override
   Widget build(BuildContext context) {

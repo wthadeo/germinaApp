@@ -13,9 +13,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var urlIrrigations = Uri.parse('http://192.168.1.12:3000/irrigations');
-  var urlCrops = Uri.parse('http://192.168.1.12:3000/crops');
-  var urlNutrients = Uri.parse('http://192.168.1.12:3000/nutrients');
+  var urlIrrigations = Uri.parse('http://192.168.0.113:3000/irrigations');
+  var urlCrops = Uri.parse('http://192.168.0.113:3000/crops');
+  var urlNutrients = Uri.parse('http://192.168.0.113:3000/nutrients');
 
   late final dataFromApi;
 

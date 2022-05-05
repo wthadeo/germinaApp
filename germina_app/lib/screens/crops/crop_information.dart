@@ -25,8 +25,8 @@ class _CropInformationState extends State<CropInformation> {
   String nameNote = '';
   String descriptionNote = '';
 
-  var urlConclude = Uri.parse('http://192.168.1.12:3000/crops/conclude');
-  var urlNote = Uri.parse('http://192.168.1.12:3000/crops/addNote');
+  var urlConclude = Uri.parse('http://192.168.0.113:3000/crops/conclude');
+  var urlNote = Uri.parse('http://192.168.0.113:3000/crops/addNote');
 
   Future<http.Response> editCropDb(String crop, var url) async {
     final http.Response response = await http.put(url,

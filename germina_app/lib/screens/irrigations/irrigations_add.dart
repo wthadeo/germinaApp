@@ -46,8 +46,8 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   List<Irrigation> irrigations = IrrigationsRepository.listOfIrrigations;
   String initialHourText = "Horário de Início";
 
-  var url = Uri.parse('http://192.168.1.12:3000/irrigations');
-  var urlUpdateNutrients = Uri.parse('http://192.168.1.12:3000/nutrients');
+  var url = Uri.parse('http://192.168.0.113:3000/irrigations');
+  var urlUpdateNutrients = Uri.parse('http://192.168.0.113:3000/nutrients');
   //************************************************************* */
 
   void _selectTime() async {

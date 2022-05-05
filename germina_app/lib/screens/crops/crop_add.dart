@@ -24,7 +24,7 @@ class _CropAddState extends State<CropAdd> {
       Crop(name: '', age: '', qntOfPlants: 0, isActive: true, notesCrop: []);
   List<Crop> crops = CropsRepository.listOfCrops;
 
-  var url = Uri.parse('http://192.168.1.12:3000/crops');
+  var url = Uri.parse('http://192.168.0.113:3000/crops');
 
   @override
   Widget build(BuildContext context) {
