@@ -13,6 +13,7 @@ import 'package:germina_app/repositories/sensors_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class IrrigationsAdd extends StatefulWidget {
   const IrrigationsAdd({Key? key}) : super(key: key);
@@ -51,6 +52,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   //************************************************************* */
 
   void _selectTime() async {
+    //Função para escolha da hora com relogio
     final TimeOfDay? newTime = await showTimePicker(
       context: context,
       initialTime: initialHour,
@@ -69,8 +71,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Horário Inválido"),
-            content: const Text(
-                "Horario de inicio deve ser maior que o atual"),
+            content: const Text("Horario de inicio deve ser maior que o atual"),
             actions: <Widget>[
               // define os botões na base do dialogo
               TextButton(
@@ -87,9 +88,15 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
     }
   }
 
+  final _multiSelectKey = GlobalKey<FormFieldState>();
+
   @override
   Widget build(BuildContext context) {
     irrigationsRep = Provider.of<IrrigationsRepository>(context);
+
+    final _itensCrop = currentCrops
+        .map((crop) => MultiSelectItem<Crop>(crop, crop.name))
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -104,11 +111,12 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
         child: Column(
           children: [
             Padding(
+              //Campo Nome da Irrigação
               //NOME DA IRRIGAÇÃO
               padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 10.0),
               child: TextField(
                   onChanged: (text) {
-                    name = text;
+                    name = text; //por padrão inicia new irrigation
                   },
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
@@ -129,6 +137,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15.0),
                       child: ElevatedButton(
+                        //botao que leva a seleção da hora de inicio
                         child: Text(initialHourText),
                         onPressed: _selectTime,
                         style: ElevatedButton.styleFrom(
@@ -145,6 +154,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                     width: 20.0,
                   ),
                   Flexible(
+                    //caixa para definir duração da irrigação
                     child: TextField(
                       keyboardType: TextInputType.number,
                       onChanged: (text) {
@@ -169,6 +179,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
+                    //caixa para definir a vazão de litros por hora
                     child: TextField(
                       keyboardType: TextInputType.number,
                       onChanged: (text) {
@@ -188,6 +199,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                     width: 10.0,
                   ),
                   Flexible(
+                    //caixa para inserir valor da energia em kwh
                     child: TextField(
                       keyboardType: TextInputType.number,
                       onChanged: (text) {
@@ -226,114 +238,31 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0, left: 25, right: 25),
-              child: DropdownButton<Crop>(
-                value: cropChoosed,
-                isExpanded: true,
-                icon: const Icon(Icons.arrow_downward),
-                iconSize: 24,
-                elevation: 16,
-                style: const TextStyle(color: primaryColor),
-                underline: Container(
-                  height: 2,
-                  color: primaryColor,
+              child: MultiSelectDialogField(
+                items: _itensCrop,
+                title: Text("Cultivos"),
+                selectedColor: Colors.blue,
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.1),
+                  borderRadius: BorderRadius.all(Radius.circular(40)),
+                  border: Border.all(
+                    color: Colors.blue,
+                    width: 2,
+                  ),
                 ),
-                items: currentCrops.map((item) {
-                  return DropdownMenuItem<Crop>(
-                    child: Text(item.name),
-                    value: item,
-                  );
-                }).toList(),
-                onChanged: (Crop? newValue) {
-                  setState(() {
-                    cropChoosed = newValue!;
-                    print(cropChoosed.name);
-                  });
-                  if (!cropsChoose.contains(cropChoosed)) {
-                    cropsChoose.add(cropChoosed);
-                    print(cropsChoose);
-                  }
-                },
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                'Dispositivo',
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16.5,
-                    color: primaryColor),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0, left: 25, right: 25),
-              child: DropdownButton<Sensor>(
-                value: sensorChosed,
-                isExpanded: true,
-                icon: const Icon(Icons.arrow_downward),
-                iconSize: 24,
-                elevation: 16,
-                style: const TextStyle(color: primaryColor),
-                underline: Container(
-                  height: 2,
-                  color: primaryColor,
+                buttonIcon: Icon(
+                  Icons.arrow_downward,
+                  color: Colors.blue,
                 ),
-                items: currentSensors.map((item) {
-                  return DropdownMenuItem<Sensor>(
-                    child: Text(item.name),
-                    value: item,
-                  );
-                }).toList(),
-                onChanged: (Sensor? newValue) {
-                  setState(() {
-                    sensorChosed = newValue!;
-                    print(sensorChosed.name);
-                  });
-                  if (!sensorsChoose.contains(sensorChosed)) {
-                    sensorsChoose.add(sensorChosed);
-                    print(sensorsChoose);
-                  }
-                },
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                'Nutrientes',
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16.5,
-                    color: primaryColor),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0, left: 25, right: 25),
-              child: DropdownButton<Nutrient>(
-                value: nutrientChosed,
-                isExpanded: true,
-                icon: const Icon(Icons.arrow_downward),
-                iconSize: 24,
-                elevation: 16,
-                style: const TextStyle(color: primaryColor),
-                underline: Container(
-                  height: 2,
-                  color: primaryColor,
+                buttonText: Text(
+                  "Escolher Cultivos",
+                  style: TextStyle(
+                    color: Colors.blue[800],
+                    fontSize: 16,
+                  ),
                 ),
-                items: currentNutrients.map((item) {
-                  return DropdownMenuItem<Nutrient>(
-                    child: Text(item.name),
-                    value: item,
-                  );
-                }).toList(),
-                onChanged: (Nutrient? newValue) {
-                  setState(() {
-                    nutrientChosed = newValue!;
-                    print(nutrientChosed.name);
-                  });
-                  if (!nutrientsChoose.contains(nutrientChosed)) {
-                    nutrientsChoose.add(nutrientChosed);
-                    print(nutrientsChoose);
-                  }
+                onConfirm: (results) {
+                  //cropsChoose = results;
                 },
               ),
             ),
@@ -378,6 +307,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   }
 }
 
+/************************* FUNÇÕES PARA SALVAR E EDITAR NO DB ***************************** */
 Future<http.Response> saveToDb(String irrigation, var url) async {
   final http.Response response = await http.post(url,
       headers: <String, String>{
@@ -395,43 +325,3 @@ Future<http.Response> editDb(String object, var url) async {
       body: object);
   return response;
 }
-
-
-buildDropButtons() {}
-
-/*
-Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        onPrimary: Colors.white,
-                        primary: primaryColor,
-                        minimumSize: const Size(30, 30),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        )),
-                    onPressed: () {},
-                    child: const Text('+')),
-              ),
-            ),
-
-
-  SizedBox(height: 100,),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    onPrimary: Colors.white,
-                    primary: primaryColor,
-                    minimumSize: const Size(300, 60),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    )),
-                onPressed: () {
-                  
-                  
-                },
-                child: const Text('Agendar Irrigação'))
-*/
