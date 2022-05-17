@@ -4,18 +4,17 @@ import 'package:germina_app/models/sensors/sensor.dart';
 import 'package:germina_app/models/sensors/soil_sensor.dart';
 import 'package:germina_app/models/sensors/temp_sensor.dart';
 
-class SensorsRepository extends ChangeNotifier{
-
+class SensorsRepository extends ChangeNotifier {
   static List<Sensor> listOfSensors = [
-    SoilSensor(25,
-        name: 'sensor_soil1',
+    SoilSensor(0,
+        name: 'sensor_soil',
         protocol: 'unknown protocol',
         uri: 'unknown uri',
         category: 'soilSensor'),
     TempSensor(
-      40,
-      42,
-      name: 'sensor_temperature2',
+      0,
+      0,
+      name: 'sensor_temperature',
       protocol: 'unknown protocol',
       uri: 'unknown uri',
     ),
@@ -23,21 +22,19 @@ class SensorsRepository extends ChangeNotifier{
 
   UnmodifiableListView<Sensor> get lista => UnmodifiableListView(listOfSensors);
 
-  saveAll(List<Sensor> sensors){
+  saveAll(List<Sensor> sensors) {
     sensors.forEach((sensor) {
-      if(!listOfSensors.contains(sensor)) listOfSensors.add(sensor);
-     });
+      if (!listOfSensors.contains(sensor)) listOfSensors.add(sensor);
+    });
     notifyListeners();
   }
 
-  refreshAll(){
+  refreshAll() {
     notifyListeners();
   }
 
-  remove(Sensor sensor){
+  remove(Sensor sensor) {
     listOfSensors.remove(sensor);
     notifyListeners();
   }
-
-
 }

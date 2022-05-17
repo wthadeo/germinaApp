@@ -21,7 +21,7 @@ class _SensorsPageState extends State<SensorsPage> {
   @override
   Widget build(BuildContext context) {
     sensorsRep = Provider.of<SensorsRepository>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -45,7 +45,10 @@ class _SensorsPageState extends State<SensorsPage> {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => const SensorAdd()));
         },
-        child: const Icon(Icons.add, color: Colors.white,),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }
@@ -83,7 +86,6 @@ Widget SensorView(int index, dynamic context) {
     ),
   );
 }
-
 
 Color categoryColor(String category) {
   if (category == 'tempSensor') {

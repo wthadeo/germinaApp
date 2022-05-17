@@ -23,7 +23,8 @@ class _NutrientInformationState extends State<NutrientInformation> {
 
   List<NoteNutrient> addNutrientList = [];
 
-  var url = Uri.parse('http://192.168.0.113:3000/nutrients');
+  //var url = Uri.parse('http://192.168.1.8:3000/nutrients'); //IP CORREIOS
+  var url = Uri.parse('http://192.168.0.10:3000/nutrients'); //IP CASA
 
   Future<http.Response> editNutrientDb(String crop, var url) async {
     final http.Response response = await http.put(url,
@@ -259,7 +260,8 @@ class _NutrientInformationState extends State<NutrientInformation> {
                                   refreshNotes(addnote);
                                   currentNutrient.totalAmount = qntidade;
                                   currentNutrient.priceMg = valorPago;
-                                  http.Response editNutrient = await editNutrientDb(
+                                  http.Response editNutrient =
+                                      await editNutrientDb(
                                           json.encode(currentNutrient.toJson()),
                                           url);
                                   Navigator.pop(context);
@@ -284,11 +286,10 @@ class _NutrientInformationState extends State<NutrientInformation> {
 }
 
 double recalcValor(int a, double b, int c, double d) {
-
   double valReais = a * b;
   int qntTotal = a + c;
   double valTotal = valReais + d;
-  double resultado = valTotal/qntTotal;
+  double resultado = valTotal / qntTotal;
 
   return resultado;
 }

@@ -13,9 +13,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var urlIrrigations = Uri.parse('http://192.168.0.113:3000/irrigations');
-  var urlCrops = Uri.parse('http://192.168.0.113:3000/crops');
-  var urlNutrients = Uri.parse('http://192.168.0.113:3000/nutrients');
+  var urlIrrigations = Uri.parse('http://192.168.0.10:3000/irrigations');
+  var urlCrops = Uri.parse('http://192.168.0.10:3000/crops');
+  var urlNutrients = Uri.parse('http://192.168.0.10:3000/nutrients');
+  /*var urlIrrigations = Uri.parse('http://192.168.1.8:3000/irrigations');
+  var urlCrops = Uri.parse('http://192.168.1.8:3000/crops');
+  var urlNutrients = Uri.parse('http://192.168.1.8:3000/nutrients');
+  var urlIrrigations = Uri.parse('http://192.168.0.103:3000/irrigations');
+  var urlCrops = Uri.parse('http://192.168.0.103:3000/crops');
+  var urlNutrients = Uri.parse('http://192.168.0.103:3000/nutrients');*/
 
   late final dataFromApi;
 
@@ -36,8 +42,7 @@ class _HomePageState extends State<HomePage> {
           CropsRepository.getCropsFromApi(urlCrops),
           NutrientsRepository.getNutrientsFromApi(urlNutrients)
         ]),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData) {
             IrrigationsRepository.listOfIrrigations = snapshot.data?[0]!;
             CropsRepository.listOfCrops = snapshot.data?[1]!;

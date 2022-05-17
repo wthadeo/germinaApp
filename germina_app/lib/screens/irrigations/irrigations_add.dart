@@ -47,8 +47,11 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   List<Irrigation> irrigations = IrrigationsRepository.listOfIrrigations;
   String initialHourText = "Horário de Início";
 
-  var url = Uri.parse('http://192.168.0.113:3000/irrigations');
-  var urlUpdateNutrients = Uri.parse('http://192.168.0.113:3000/nutrients');
+  //var url = Uri.parse('http://192.168.1.8:3000/irrigations');// IP CORREIOS
+  var url = Uri.parse('http://192.168.0.10:3000/irrigations'); // IP CASA
+  //var urlUpdateNutrients = Uri.parse('http://192.168.1.8:3000/nutrients'); //IP CORREIOS
+  var urlUpdateNutrients =
+      Uri.parse('http://192.168.0.10:3000/nutrients'); //IP CASA
   //************************************************************* */
 
   void _selectTime() async {
@@ -96,6 +99,14 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
 
     final _itensCrop = currentCrops
         .map((crop) => MultiSelectItem<Crop>(crop, crop.name))
+        .toList();
+
+    final _itensNutrient = currentNutrients
+        .map((nutrient) => MultiSelectItem<Nutrient>(nutrient, nutrient.name))
+        .toList();
+
+    final _itensSensor = currentSensors
+        .map((sensor) => MultiSelectItem<Sensor>(sensor, sensor.name))
         .toList();
 
     return Scaffold(
@@ -262,6 +273,87 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                   ),
                 ),
                 onConfirm: (results) {
+                  cropsChoose = [];
+                  results.forEach((crop) {
+                    cropsChoose.add(crop as Crop);
+                  });
+                  print(cropsChoose.toString());
+                  //cropsChoose = results;
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0, left: 25, right: 25),
+              child: MultiSelectDialogField(
+                items: _itensSensor,
+                title: Text("Sensores"),
+                selectedColor: Colors.blue,
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.1),
+                  borderRadius: BorderRadius.all(Radius.circular(40)),
+                  border: Border.all(
+                    color: Colors.blue,
+                    width: 2,
+                  ),
+                ),
+                buttonIcon: Icon(
+                  Icons.arrow_downward,
+                  color: Colors.blue,
+                ),
+                buttonText: Text(
+                  "Escolher Sensores",
+                  style: TextStyle(
+                    color: Colors.blue[800],
+                    fontSize: 16,
+                  ),
+                ),
+                onConfirm: (results) {
+                  sensorsChoose = [];
+                  results.forEach((sensor) {
+                    sensorsChoose.add(sensor as Sensor);
+                  });
+                  print(sensorsChoose.toString());
+                  //cropsChoose = results;
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0, left: 25, right: 25),
+              child: MultiSelectDialogField(
+                items: _itensNutrient,
+                title: Text("Nutrients"),
+                selectedColor: Colors.blue,
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.1),
+                  borderRadius: BorderRadius.all(Radius.circular(40)),
+                  border: Border.all(
+                    color: Colors.blue,
+                    width: 2,
+                  ),
+                ),
+                buttonIcon: Icon(
+                  Icons.arrow_downward,
+                  color: Colors.blue,
+                ),
+                buttonText: Text(
+                  "Escolher Nutrientes",
+                  style: TextStyle(
+                    color: Colors.blue[800],
+                    fontSize: 16,
+                  ),
+                ),
+                onConfirm: (results) {
+                  nutrientsChoose = [];
+                  results.forEach((nutrient) {
+                    nutrientsChoose.add(nutrient as Nutrient);
+                  });
+                  print(nutrientsChoose.toString());
                   //cropsChoose = results;
                 },
               ),

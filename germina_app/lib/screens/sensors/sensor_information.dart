@@ -5,11 +5,25 @@ import 'package:germina_app/constants.dart';
 import 'package:germina_app/models/sensors/sensor.dart';
 import 'package:germina_app/models/sensors/soil_sensor.dart';
 import 'package:germina_app/models/sensors/temp_sensor.dart';
+//import 'package:more4iot_dart_api/more4iot_dart_api.dart';
 
-class SensorInformation extends StatelessWidget {
+class SensorInformation extends StatefulWidget {
   SensorInformation({Key? key}) : super(key: key);
 
+  @override
+  State<SensorInformation> createState() => _SensorInformationState();
+}
+
+class _SensorInformationState extends State<SensorInformation> {
   Sensor currentSensor = Communicator.currentSensor;
+
+  /*void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final more4iot = More4iotMqtt(host: '192.168.0.5');
+      more4iot.connect(germina, 'application');
+    });
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +44,8 @@ class SensorInformation extends StatelessWidget {
 Widget bodyFactory(dynamic context) {
   if (Communicator.currentSensor.category == 'tempSensor') {
     TempSensor tmp = Communicator.currentSensor as TempSensor;
+    //tmp.temperature = INFO_OF_SENSOR;
+    //tmp.umidity = INFO_OF_SENSOR;
     return Center(
       child: Column(
         children: [
@@ -55,7 +71,8 @@ Widget bodyFactory(dynamic context) {
                     child: Text(
                   tmp.temperature.toString() + 'ºC',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 30.0),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w900, fontSize: 30.0),
                 )),
               ])),
           const SizedBox(
@@ -73,24 +90,27 @@ Widget bodyFactory(dynamic context) {
               height: 200.0,
               width: 200.0,
               child: Stack(children: [
-                Center(
-                    child:
-                        Image.asset('lib/assets/images/umidity.png')),
+                Center(child: Image.asset('lib/assets/images/umidity.png')),
                 Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 100.0),
-                      child: Text(
-                  tmp.umidity.toString() + '%',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 30.0, color: Colors.white),
-                ),
-                    )),
+                  padding: const EdgeInsets.only(top: 100.0),
+                  child: Text(
+                    tmp.umidity.toString() + '%',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 30.0,
+                        color: Colors.white),
+                  ),
+                )),
               ]))
         ],
       ),
     );
   } else {
-    SoilSensor tmp = Communicator.currentSensor as SoilSensor;
+    SoilSensor soil = Communicator.currentSensor as SoilSensor;
+    //tmp.dataSoil = INFO_OF_SENSOR;
+    int _drySoil = 0;
     return SizedBox(
       height: 300,
       child: Stack(
@@ -103,14 +123,14 @@ Widget bodyFactory(dynamic context) {
               sections: [
                 PieChartSectionData(
                   color:
-                      primaryColor.withOpacity(tmp.dataSoil <= 70 ? 0.3 : 0.7),
-                  value: tmp.dataSoil.toDouble(),
+                      primaryColor.withOpacity(soil.dataSoil <= 70 ? 0.3 : 0.7),
+                  value: soil.dataSoil.toDouble(),
                   showTitle: false,
                   radius: 40,
                 ),
                 PieChartSectionData(
                   color: primaryColor.withOpacity(0.1),
-                  value: (100 - tmp.dataSoil).toDouble(),
+                  value: (100 - soil.dataSoil).toDouble(),
                   showTitle: false,
                   radius: 25,
                 ),
@@ -124,7 +144,7 @@ Widget bodyFactory(dynamic context) {
                 const Text("Soil Moisture"),
                 const SizedBox(height: 16.0),
                 Text(
-                  "${tmp.dataSoil}%",
+                  "${soil.dataSoil}%",
                   style: Theme.of(context).textTheme.headline4!.copyWith(
                         color: primaryColor.withOpacity(0.7),
                         fontWeight: FontWeight.w600,
@@ -139,3 +159,21 @@ Widget bodyFactory(dynamic context) {
     );
   }
 }
+
+/*
+ void germina(Scope scope) {
+    final soilMoisture = scope.getData<int>('soil-moisture');
+    final drySoil = scope.getCommand<int>('dry-soil');
+    final temperature = scope.getData<int>('temperature');
+    final umidity = scope.getData<int>('umidity');
+
+    print('SCOPE: $soilMoisture  $drySoil  $temperature  $umidity');
+
+    setState(() {
+      _soilMoisture = soilMoisture;
+      _drySoil = drySoil;
+    });
+  }
+
+
+ */
