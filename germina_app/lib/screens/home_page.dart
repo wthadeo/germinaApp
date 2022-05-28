@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:germina_app/repositories/crops_repository.dart';
 import 'package:germina_app/repositories/irrigations_repository.dart';
 import 'package:germina_app/repositories/nutrients_repository.dart';
-
 import '../constants.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,17 +12,41 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var urlIrrigations = Uri.parse('http://192.168.0.10:3000/irrigations');
-  var urlCrops = Uri.parse('http://192.168.0.10:3000/crops');
-  var urlNutrients = Uri.parse('http://192.168.0.10:3000/nutrients');
-  /*var urlIrrigations = Uri.parse('http://192.168.1.8:3000/irrigations');
-  var urlCrops = Uri.parse('http://192.168.1.8:3000/crops');
-  var urlNutrients = Uri.parse('http://192.168.1.8:3000/nutrients');
-  var urlIrrigations = Uri.parse('http://192.168.0.103:3000/irrigations');
-  var urlCrops = Uri.parse('http://192.168.0.103:3000/crops');
-  var urlNutrients = Uri.parse('http://192.168.0.103:3000/nutrients');*/
+  var urlIrrigations = homeIrrigUrl;
+  var urlCrops = homeCropsUrl;
+  var urlNutrients = homeNutrientsUrl;
 
+  // ignore: prefer_typing_uninitialized_variables
   late final dataFromApi;
+
+  /*int _soilMoisture = 0;
+  int _drySoil = 0;
+  double _temperature = 0;
+  double _humidity = 0;
+
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final more4iot = More4iotMqtt(host: '192.168.0.113');
+      more4iot.connect(germina, 'application');
+    });
+  }
+
+  void germina(Scope scope) {
+    final soilMoisture = scope.getData<int>('soil-moisture');
+    final temperature = scope.getData<double>('temperature');
+    final humidity = scope.getData<double>('humidity');
+    final drySoil = scope.getCommand<int>('dry-soil');
+
+    print('SCOPE: $soilMoisture  $temperature  $humidity  $drySoil');
+
+    setState(() {
+      _soilMoisture = soilMoisture;
+      _temperature = temperature;
+      _humidity = humidity;
+      _drySoil = drySoil;
+    });
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +70,20 @@ class _HomePageState extends State<HomePage> {
             IrrigationsRepository.listOfIrrigations = snapshot.data?[0]!;
             CropsRepository.listOfCrops = snapshot.data?[1]!;
             NutrientsRepository.listOfNutrients = snapshot.data?[2]!;
+            /*SensorsRepository.listOfSensors = [
+              SoilSensor(_soilMoisture,
+                  name: 'sensor_soil',
+                  protocol: 'mqtt',
+                  uri: 'unknown uri',
+                  category: 'soilSensor'),
+              TempSensor(
+                _temperature,
+                _humidity,
+                name: 'sensor_temperature',
+                protocol: 'mqtt',
+                uri: 'unknown uri',
+              )
+            ];*/
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[

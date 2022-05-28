@@ -61,8 +61,8 @@ Widget NutrientView(int index, dynamic context) {
   return GestureDetector(
     onTap: () {
       Communicator.currentNutrient = _NutrientsPageState.nutrients[index];
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => NutrientInformation()));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const NutrientInformation()));
     },
     child: Container(
       height: 300,

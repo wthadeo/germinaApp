@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import '../../constants.dart';
 import 'package:flutter/material.dart';
 import 'package:germina_app/constants.dart';
 import 'package:germina_app/models/crop.dart';
@@ -24,8 +24,7 @@ class _CropAddState extends State<CropAdd> {
       Crop(name: '', age: '', qntOfPlants: 0, isActive: true, notesCrop: []);
   List<Crop> crops = CropsRepository.listOfCrops;
 
-  //var url = Uri.parse('http://192.168.1.8:3000/crops');  IP CORREIOS
-  var url = Uri.parse('http://192.168.0.10:3000/crops'); // IP CASA
+  var url = homeCropsUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +101,7 @@ class _CropAddState extends State<CropAdd> {
                       isActive: true,
                       notesCrop: []);
                   crops.add(cropAdded);
+                  // ignore: unused_local_variable
                   http.Response saveToDB =
                       await saveToDb(json.encode(cropAdded.toJson()), url);
                   cropsRep.saveAll(crops);

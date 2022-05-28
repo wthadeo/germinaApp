@@ -22,8 +22,7 @@ class _NutriendAddState extends State<NutrientAdd> {
   Nutrient nutrientAdded = Nutrient(name: '', priceMg: 0, totalAmount: 0);
   List<Nutrient> nutrients = NutrientsRepository.listOfNutrients;
 
-  //var url = Uri.parse('http://192.168.1.8:3000/nutrients');//IP CORREIOS
-  var url = Uri.parse('http://192.168.0.10:3000/nutrients'); //IP CASA
+  var url = homeNutrientsUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +102,7 @@ class _NutriendAddState extends State<NutrientAdd> {
                   nutrientAdded = Nutrient(
                       name: name, totalAmount: totalAmount, priceMg: price);
                   nutrients.add(nutrientAdded);
+                  // ignore: unused_local_variable
                   http.Response saveToDB =
                       await saveToDb(json.encode(nutrientAdded.toJson()), url);
                   nutrientsRep.saveAll(nutrients);

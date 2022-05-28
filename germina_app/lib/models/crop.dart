@@ -28,7 +28,7 @@ class Crop {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['age'] = age;
     data['qntOfPlants'] = qntOfPlants;
@@ -39,15 +39,15 @@ class Crop {
 
   @override
   toString() {
-    return "\"name\":" +
-        "\"$name\"," +
-        "\"age\":" +
-        "\"$age\"," +
-        "\"qntOfPlants\":" +
-        "$qntOfPlants," +
-        "\"isActive\":" +
-        " $isActive," +
-        "\"notesCrop\":" +
+    return "\"name\":"
+        "\"$name\","
+        "\"age\":"
+        "\"$age\","
+        "\"qntOfPlants\":"
+        "$qntOfPlants,"
+        "\"isActive\":"
+        " $isActive,"
+        "\"notesCrop\":"
         "${notesCrop.toString()}";
   }
   /*

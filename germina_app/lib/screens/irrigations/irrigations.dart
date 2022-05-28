@@ -62,8 +62,8 @@ Widget IrrigationView(int index, dynamic context) {
   return GestureDetector(
     onTap: () {
       Communicator.currentIrrigator = _IrrigationsPageState.irrigations[index];
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => IrrigationInformation()));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const IrrigationInformation()));
     },
     child: Container(
       height: 300,

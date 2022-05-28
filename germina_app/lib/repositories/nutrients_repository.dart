@@ -29,6 +29,7 @@ class NutrientsRepository extends ChangeNotifier {
   }
 
   saveAll(List<Nutrient> nutrients) {
+    // ignore: avoid_function_literals_in_foreach_calls
     nutrients.forEach((nutrient) {
       if (!listOfNutrients.contains(nutrient)) {
         listOfNutrients.add(nutrient);
@@ -37,7 +38,7 @@ class NutrientsRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  refreshAll(){
+  refreshAll() {
     notifyListeners();
   }
 

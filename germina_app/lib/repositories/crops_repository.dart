@@ -29,13 +29,14 @@ class CropsRepository extends ChangeNotifier {
   }
 
   saveAll(List<Crop> crops) {
+    // ignore: avoid_function_literals_in_foreach_calls
     crops.forEach((crop) {
       if (!listOfCrops.contains(crop)) listOfCrops.add(crop);
     });
     notifyListeners();
   }
 
-  refreshAll(){
+  refreshAll() {
     notifyListeners();
   }
 

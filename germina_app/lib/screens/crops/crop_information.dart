@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CropInformation extends StatefulWidget {
-  CropInformation({Key? key}) : super(key: key);
+  const CropInformation({Key? key}) : super(key: key);
 
   @override
   State<CropInformation> createState() => _CropInformationState();
@@ -25,11 +25,8 @@ class _CropInformationState extends State<CropInformation> {
   String nameNote = '';
   String descriptionNote = '';
 
-  // var urlConclude = Uri.parse('http://192.168.1.8:3000/crops/conclude'); IP CORREIOS
-  var urlConclude =
-      Uri.parse('http://192.168.0.10:3000/crops/conclude'); // IP CASA
-  //var urlNote = Uri.parse('http://192.168.1.8:3000/crops/addNote'); IP CORREIOS
-  var urlNote = Uri.parse('http://192.168.0.10:3000/crops/addNote'); //IP CASA
+  var urlConclude = homeCropsUrlConclude;
+  var urlNote = homeCropsUrlNote;
 
   Future<http.Response> editCropDb(String crop, var url) async {
     final http.Response response = await http.put(url,
@@ -77,6 +74,7 @@ class _CropInformationState extends State<CropInformation> {
                                   ElevatedButton(
                                     child: const Text("Sim"),
                                     onPressed: () async {
+                                      // ignore: unused_local_variable
                                       http.Response edit = await editCropDb(
                                           json.encode(currentCrop.toJson()),
                                           url);
@@ -313,7 +311,7 @@ class _CropInformationState extends State<CropInformation> {
                               ),
                             ),
                             Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
                                   onChanged: (text) {
                                     descriptionNote = text;
@@ -333,6 +331,7 @@ class _CropInformationState extends State<CropInformation> {
                                           .format(DateTime.now())
                                           .toString());
                                   refreshNotes(addnote);
+                                  // ignore: unused_local_variable
                                   http.Response editCrop = await editCropDb(
                                       json.encode(currentCrop.toJson()),
                                       urlNote);
@@ -365,10 +364,13 @@ String calculateAge(final initialAge) {
   List<String> split = initialAge.toString().split('-');
   int year, month, day;
   year = int.parse(split[0]);
+  // ignore: unnecessary_type_check
   assert(year is int);
   month = int.parse(split[1]);
+  // ignore: unnecessary_type_check
   assert(month is int);
   day = int.parse(split[2]);
+  // ignore: unnecessary_type_check
   assert(day is int);
   final atual = DateTime.now();
   final initial = DateTime(day, month, year);

@@ -39,6 +39,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
       hour: int.parse(DateFormat('hh').format(DateTime.now())),
       minute: int.parse(DateFormat('mm').format(DateTime.now())));
   int minutesActive = 0;
+  // ignore: unused_field
   static Hour hourToStop = Hour(hour: 0, minutes: 0);
   int flowRate = 0;
   double energyPrice = 0;
@@ -47,11 +48,8 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   List<Irrigation> irrigations = IrrigationsRepository.listOfIrrigations;
   String initialHourText = "Horário de Início";
 
-  //var url = Uri.parse('http://192.168.1.8:3000/irrigations');// IP CORREIOS
-  var url = Uri.parse('http://192.168.0.10:3000/irrigations'); // IP CASA
-  //var urlUpdateNutrients = Uri.parse('http://192.168.1.8:3000/nutrients'); //IP CORREIOS
-  var urlUpdateNutrients =
-      Uri.parse('http://192.168.0.10:3000/nutrients'); //IP CASA
+  var url = homeIrrigUrl;
+  var urlUpdateNutrients = homeNutrientsUrl;
   //************************************************************* */
 
   void _selectTime() async {
@@ -90,8 +88,6 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
       );
     }
   }
-
-  final _multiSelectKey = GlobalKey<FormFieldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +166,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                       keyboardType: TextInputType.number,
                       onChanged: (text) {
                         minutesActive = int.parse(text);
+                        // ignore: avoid_print
                         print(minutesActive.toString());
                       },
                       decoration: const InputDecoration(
@@ -195,6 +192,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                       keyboardType: TextInputType.number,
                       onChanged: (text) {
                         flowRate = int.parse(text);
+                        // ignore: avoid_print
                         print(flowRate.toString());
                       },
                       decoration: const InputDecoration(
@@ -222,6 +220,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                         } else {
                           energyPrice = double.parse(text);
                         }
+                        // ignore: avoid_print
                         print(energyPrice.toString());
                       },
                       decoration: const InputDecoration(
@@ -251,17 +250,17 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
               padding: const EdgeInsets.only(bottom: 8.0, left: 25, right: 25),
               child: MultiSelectDialogField(
                 items: _itensCrop,
-                title: Text("Cultivos"),
+                title: const Text("Cultivos"),
                 selectedColor: Colors.blue,
                 decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(0.1),
-                  borderRadius: BorderRadius.all(Radius.circular(40)),
+                  borderRadius: const BorderRadius.all(Radius.circular(40)),
                   border: Border.all(
                     color: Colors.blue,
                     width: 2,
                   ),
                 ),
-                buttonIcon: Icon(
+                buttonIcon: const Icon(
                   Icons.arrow_downward,
                   color: Colors.blue,
                 ),
@@ -274,9 +273,11 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                 ),
                 onConfirm: (results) {
                   cropsChoose = [];
+                  // ignore: avoid_function_literals_in_foreach_calls
                   results.forEach((crop) {
                     cropsChoose.add(crop as Crop);
                   });
+                  // ignore: avoid_print
                   print(cropsChoose.toString());
                   //cropsChoose = results;
                 },
@@ -289,17 +290,17 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
               padding: const EdgeInsets.only(bottom: 8.0, left: 25, right: 25),
               child: MultiSelectDialogField(
                 items: _itensSensor,
-                title: Text("Sensores"),
+                title: const Text("Sensores"),
                 selectedColor: Colors.blue,
                 decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(0.1),
-                  borderRadius: BorderRadius.all(Radius.circular(40)),
+                  borderRadius: const BorderRadius.all(Radius.circular(40)),
                   border: Border.all(
                     color: Colors.blue,
                     width: 2,
                   ),
                 ),
-                buttonIcon: Icon(
+                buttonIcon: const Icon(
                   Icons.arrow_downward,
                   color: Colors.blue,
                 ),
@@ -312,9 +313,11 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                 ),
                 onConfirm: (results) {
                   sensorsChoose = [];
+                  // ignore: avoid_function_literals_in_foreach_calls
                   results.forEach((sensor) {
                     sensorsChoose.add(sensor as Sensor);
                   });
+                  // ignore: avoid_print
                   print(sensorsChoose.toString());
                   //cropsChoose = results;
                 },
@@ -327,17 +330,17 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
               padding: const EdgeInsets.only(bottom: 8.0, left: 25, right: 25),
               child: MultiSelectDialogField(
                 items: _itensNutrient,
-                title: Text("Nutrients"),
+                title: const Text("Nutrients"),
                 selectedColor: Colors.blue,
                 decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(0.1),
-                  borderRadius: BorderRadius.all(Radius.circular(40)),
+                  borderRadius: const BorderRadius.all(Radius.circular(40)),
                   border: Border.all(
                     color: Colors.blue,
                     width: 2,
                   ),
                 ),
-                buttonIcon: Icon(
+                buttonIcon: const Icon(
                   Icons.arrow_downward,
                   color: Colors.blue,
                 ),
@@ -350,9 +353,11 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                 ),
                 onConfirm: (results) {
                   nutrientsChoose = [];
+                  // ignore: avoid_function_literals_in_foreach_calls
                   results.forEach((nutrient) {
                     nutrientsChoose.add(nutrient as Nutrient);
                   });
+                  // ignore: avoid_print
                   print(nutrientsChoose.toString());
                   //cropsChoose = results;
                 },
@@ -386,6 +391,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                       listOfNotifications: []);
                   //atualizar os nutrientes, diminuindo a quantidade de nutrientes gastos aqui
                   irrigations.add(irrigationAdded);
+                  // ignore: unused_local_variable
                   http.Response saveToDB = await saveToDb(
                       json.encode(irrigationAdded.toJson()), url);
                   irrigationsRep.saveAll(irrigations);
@@ -399,7 +405,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   }
 }
 
-/************************* FUNÇÕES PARA SALVAR E EDITAR NO DB ***************************** */
+// FUNÇÕES PARA SALVAR E EDITAR NO DB
 Future<http.Response> saveToDb(String irrigation, var url) async {
   final http.Response response = await http.post(url,
       headers: <String, String>{

@@ -8,21 +8,22 @@ class SensorsRepository extends ChangeNotifier {
   static List<Sensor> listOfSensors = [
     SoilSensor(0,
         name: 'sensor_soil',
-        protocol: 'unknown protocol',
+        protocol: 'mqtt',
         uri: 'unknown uri',
         category: 'soilSensor'),
     TempSensor(
       0,
       0,
       name: 'sensor_temperature',
-      protocol: 'unknown protocol',
+      protocol: 'mqtt',
       uri: 'unknown uri',
-    ),
+    )
   ];
 
   UnmodifiableListView<Sensor> get lista => UnmodifiableListView(listOfSensors);
 
   saveAll(List<Sensor> sensors) {
+    // ignore: avoid_function_literals_in_foreach_calls
     sensors.forEach((sensor) {
       if (!listOfSensors.contains(sensor)) listOfSensors.add(sensor);
     });

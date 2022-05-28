@@ -91,7 +91,9 @@ class _IrrigationInformationState extends State<IrrigationInformation> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: Text(
-                        'Vazão: ' + currentIrrigation.flowRate.toString() + ' L/h',
+                        'Vazão: ' +
+                            currentIrrigation.flowRate.toString() +
+                            ' L/h',
                         style: const TextStyle(
                             fontSize: 18.0, fontWeight: FontWeight.w300),
                       ),
@@ -99,7 +101,9 @@ class _IrrigationInformationState extends State<IrrigationInformation> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: Text(
-                        'Energia: R\$' + currentIrrigation.energy.toStringAsFixed(2) + ' kWh',
+                        'Energia: R\$' +
+                            currentIrrigation.energy.toStringAsFixed(2) +
+                            ' kWh',
                         style: const TextStyle(
                             fontSize: 18.0, fontWeight: FontWeight.w300),
                       ),
@@ -171,7 +175,7 @@ class _IrrigationInformationState extends State<IrrigationInformation> {
                             child: ListView.separated(
                               itemBuilder: (BuildContext context, int note) {
                                 return Column(
-                                  children: [
+                                  children: const [
                                     Text(
                                       'Quantidade: ' /* +
                                           addNutrientList[note]
@@ -216,18 +220,15 @@ class _IrrigationInformationState extends State<IrrigationInformation> {
   }
 }
 
-String listOf(List state){
-
+String listOf(List state) {
   String result = '';
 
-  for(int i = 0; i < state.length; i++){
-
-    if(i < state.length-1){
+  for (int i = 0; i < state.length; i++) {
+    if (i < state.length - 1) {
       result = result + state[i].name + ' | ';
     } else {
       result = result + state[i].name;
     }
-
   }
   return result;
 }

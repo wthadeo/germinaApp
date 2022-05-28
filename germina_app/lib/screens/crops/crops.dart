@@ -62,8 +62,8 @@ Widget CropView(int index, dynamic context) {
   return GestureDetector(
     onTap: () {
       Communicator.currentCrop = _CropsPageState.crops[index];
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => CropInformation()));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const CropInformation()));
     },
     onLongPress: () {
       Communicator.currentCrop = _CropsPageState.crops[index];

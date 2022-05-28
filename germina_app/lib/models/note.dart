@@ -1,5 +1,4 @@
-class Note{
-
+class Note {
   String name;
   String description;
   String date;
@@ -7,8 +6,13 @@ class Note{
   Note({required this.name, required this.description, required this.date});
 
   @override
-  toString(){
-    return "{\"name\":" +  "\"$name\"," + "\"description\":" +  "\"$description\"," + "\"date\":" + "\"$date\"}";
+  toString() {
+    return "{\"name\":"
+        "\"$name\","
+        "\"description\":"
+        "\"$description\","
+        "\"date\":"
+        "\"$date\"}";
   }
 
   factory Note.fromJson(Map<String, dynamic> json) {
@@ -19,7 +23,7 @@ class Note{
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['description'] = description;
     data['date'] = date;

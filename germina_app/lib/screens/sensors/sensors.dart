@@ -62,8 +62,8 @@ Widget SensorView(int index, dynamic context) {
   return GestureDetector(
     onTap: () {
       Communicator.currentSensor = SensorsRepository.listOfSensors[index];
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => SensorInformation()));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const SensorInformation()));
     },
     child: Container(
       height: 300,

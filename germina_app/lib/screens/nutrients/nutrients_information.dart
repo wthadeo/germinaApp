@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class NutrientInformation extends StatefulWidget {
-  NutrientInformation({Key? key}) : super(key: key);
+  const NutrientInformation({Key? key}) : super(key: key);
 
   @override
   State<NutrientInformation> createState() => _NutrientInformationState();
@@ -23,8 +23,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
 
   List<NoteNutrient> addNutrientList = [];
 
-  //var url = Uri.parse('http://192.168.1.8:3000/nutrients'); //IP CORREIOS
-  var url = Uri.parse('http://192.168.0.10:3000/nutrients'); //IP CASA
+  var url = homeNutrientsUrl;
 
   Future<http.Response> editNutrientDb(String crop, var url) async {
     final http.Response response = await http.put(url,
@@ -224,7 +223,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
                               ),
                             ),
                             Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
                                   onChanged: (text) {
                                     if (text.contains(',')) {
@@ -260,6 +259,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
                                   refreshNotes(addnote);
                                   currentNutrient.totalAmount = qntidade;
                                   currentNutrient.priceMg = valorPago;
+                                  // ignore: unused_local_variable
                                   http.Response editNutrient =
                                       await editNutrientDb(
                                           json.encode(currentNutrient.toJson()),
