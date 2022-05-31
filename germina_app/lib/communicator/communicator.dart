@@ -17,6 +17,7 @@ class Communicator {
       sensor: [],
       nutrient: [],
       state: false,
+      isFinished: false,
       listOfNotifications: []);
   static Crop currentCrop =
       Crop(name: '', age: '', qntOfPlants: 0, isActive: false, notesCrop: []);

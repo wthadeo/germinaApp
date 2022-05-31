@@ -21,7 +21,6 @@ class _IrrigationsPageState extends State<IrrigationsPage> {
   @override
   Widget build(BuildContext context) {
     irrigationsRep = Provider.of<IrrigationsRepository>(context);
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -58,6 +57,7 @@ class _IrrigationsPageState extends State<IrrigationsPage> {
 Widget IrrigationView(int index, dynamic context) {
   String name = _IrrigationsPageState.irrigations[index].name;
   bool active = _IrrigationsPageState.irrigations[index].state;
+  bool isFinished = _IrrigationsPageState.irrigations[index].isFinished;
 
   return GestureDetector(
     onTap: () {
@@ -88,9 +88,9 @@ Widget IrrigationView(int index, dynamic context) {
             height: 15.0,
           ),
           Text(
-            isActive(active),
+            isActive(active, isFinished),
             style: TextStyle(
-                color: activeColor(active),
+                color: activeColor(active, isFinished),
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500),
           ),
@@ -100,7 +100,10 @@ Widget IrrigationView(int index, dynamic context) {
   );
 }
 
-Color activeColor(bool active) {
+Color activeColor(bool active, isFinished) {
+  if (isFinished) {
+    return Colors.red;
+  }
   if (active) {
     return Colors.green;
   } else {
@@ -108,10 +111,12 @@ Color activeColor(bool active) {
   }
 }
 
-String isActive(bool isActive) {
-  if (isActive) {
+String isActive(bool isActive, bool isFinished) {
+  if (isActive && !isFinished) {
     return "Ativo";
+  } else if (!isActive && !isFinished) {
+    return "Desativada";
   } else {
-    return "Completo";
+    return "Finalizada";
   }
 }

@@ -44,6 +44,7 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
   int flowRate = 0;
   double energyPrice = 0;
   bool isActive = true;
+  bool isFinished = false;
   late Irrigation irrigationAdded;
   List<Irrigation> irrigations = IrrigationsRepository.listOfIrrigations;
   String initialHourText = "Horário de Início";
@@ -387,7 +388,8 @@ class _IrrigationsAddState extends State<IrrigationsAdd> {
                       crop: cropsChoose,
                       sensor: sensorsChoose,
                       nutrient: nutrientsChoose,
-                      state: true,
+                      state: false,
+                      isFinished: false,
                       listOfNotifications: []);
                   //atualizar os nutrientes, diminuindo a quantidade de nutrientes gastos aqui
                   irrigations.add(irrigationAdded);

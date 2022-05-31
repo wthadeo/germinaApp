@@ -14,6 +14,7 @@ class Irrigation {
   List<Sensor> sensor;
   List<Nutrient> nutrient;
   bool state;
+  bool isFinished;
   List<Notification> listOfNotifications;
 
   Irrigation(
@@ -27,6 +28,7 @@ class Irrigation {
       required this.sensor,
       required this.nutrient,
       required this.state,
+      required this.isFinished,
       required this.listOfNotifications});
 
   factory Irrigation.fromJson(Map<String, dynamic> json) {
@@ -51,6 +53,7 @@ class Irrigation {
         sensor: _sensors,
         nutrient: _nutrients,
         state: json['state'],
+        isFinished: json['isFinished'],
         listOfNotifications: _notifications);
   }
 
@@ -66,6 +69,7 @@ class Irrigation {
     data['sensor'] = sensor.map((v) => v.toJson()).toList();
     data['nutrient'] = nutrient.map((v) => v.toJson()).toList();
     data['state'] = state;
+    data['isFinished'] = isFinished;
     data['listOfNotifications'] = [];
     return data;
   }

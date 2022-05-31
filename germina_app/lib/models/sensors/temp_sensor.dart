@@ -1,8 +1,8 @@
 import 'package:germina_app/models/sensors/sensor.dart';
 
 class TempSensor extends Sensor {
-  double temperature;
-  double umidity;
+  int temperature;
+  int umidity;
 
   TempSensor(this.temperature, this.umidity,
       {required String name,

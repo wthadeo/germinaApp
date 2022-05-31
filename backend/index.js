@@ -122,6 +122,7 @@ app.post('/irrigations', (req, res) => {
     let sensor = req.body.sensor;
     let nutrient = req.body.nutrient;
     let state = req.body.state;
+    let isFinished = req.body.isFinished;
     let listOfNotifications = req.body.listOfNotifications;
 
     let newIrrigation = new Irrigation({
@@ -135,6 +136,7 @@ app.post('/irrigations', (req, res) => {
         sensor,
         nutrient,
         state,
+        isFinished,
         listOfNotifications
     });
 
@@ -145,5 +147,9 @@ app.post('/irrigations', (req, res) => {
         res.send('Erro: ' + error);
     });
 });
+
+/*setInterval(()=>{
+    console.log('testando a cada 1min');
+}, 5000);*/
 
 app.listen(3000, () => console.log('Server rodando'));

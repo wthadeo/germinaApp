@@ -18,10 +18,9 @@ class _SensorInformationState extends State<SensorInformation> {
   Sensor currentSensor = Communicator.currentSensor;
 
   int _soilMoisture = 0;
-  // ignore: unused_field
-  int _drySoil = 0;
-  double _temperature = 0;
-  double _humidity = 0;
+  //int _drySoil = 0;
+  int _temperature = 0;
+  int _humidity = 0;
 
   @override
   void initState() {
@@ -49,18 +48,18 @@ class _SensorInformationState extends State<SensorInformation> {
 
   void germina(Scope scope) {
     final soilMoisture = scope.getData<int>('soil-moisture');
-    final temperature = scope.getData<double>('temperature');
-    final humidity = scope.getData<double>('humidity');
-    final drySoil = scope.getCommand<int>('dry-soil');
+    final temperature = scope.getData<int>('temperature');
+    final humidity = scope.getData<int>('humidity');
+    //final drySoil = scope.getCommand<int>('dry-soil');
 
     // ignore: avoid_print
-    print('SCOPE: $soilMoisture  $temperature  $humidity  $drySoil');
+    print('SCOPE: $soilMoisture  $temperature  $humidity  ');
 
     setState(() {
       _soilMoisture = soilMoisture;
       _temperature = temperature;
       _humidity = humidity;
-      _drySoil = drySoil;
+      //_drySoil = drySoil;
     });
   }
 
@@ -69,6 +68,7 @@ class _SensorInformationState extends State<SensorInformation> {
       TempSensor tmp = Communicator.currentSensor as TempSensor;
       tmp.temperature = _temperature;
       tmp.umidity = _humidity;
+      //dispose();
       return Center(
         child: Column(
           children: [
@@ -131,8 +131,10 @@ class _SensorInformationState extends State<SensorInformation> {
         ),
       );
     } else {
+      //dispose();
       SoilSensor soil = Communicator.currentSensor as SoilSensor;
       soil.dataSoil = _soilMoisture;
+
       return SizedBox(
         height: 300,
         child: Stack(

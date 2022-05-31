@@ -31,6 +31,7 @@ const irrigationSchema = new mongoose.Schema({
     totalAmount: Number,
   }],
   state: Boolean,
+  isFinished: Boolean,
   listOfNotifications: [{
     notification: String,
     description: String,
