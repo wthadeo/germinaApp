@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
 import '../../constants.dart';
 import 'package:flutter/material.dart';
 import 'package:germina_app/constants.dart';
@@ -25,6 +27,11 @@ class _CropAddState extends State<CropAdd> {
   List<Crop> crops = CropsRepository.listOfCrops;
 
   var url = homeCropsUrl;
+
+  var maskFormatter = MaskTextInputFormatter(
+      mask: '##-##-####',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +65,9 @@ class _CropAddState extends State<CropAdd> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 10.0),
               child: TextField(
+                  inputFormatters: [maskFormatter],
                   onChanged: (text) {
-                    age = text;
+                    age = maskFormatter.getMaskedText();
                   },
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(

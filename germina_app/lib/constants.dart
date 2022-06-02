@@ -15,8 +15,9 @@ const Color secondaryColor = Color.fromRGBO(115, 200, 215, 1);
 
 var homeIrrigUrl = Uri.parse('http://192.168.0.113:3000/irrigations');
 var homeCropsUrl = Uri.parse('http://192.168.0.113:3000/crops');
-var homeCropsUrlConclude = Uri.parse('http://192.168.0.10:3000/crops/conclude');
-var homeCropsUrlNote = Uri.parse('http://192.168.0.10:3000/crops/addNote');
+var homeCropsUrlConclude =
+    Uri.parse('http://192.168.0.113:3000/crops/conclude');
+var homeCropsUrlNote = Uri.parse('http://192.168.0.113:3000/crops/addNote');
 var homeNutrientsUrl = Uri.parse('http://192.168.0.113:3000/nutrients');
 
 Map<int, Color> color = {
