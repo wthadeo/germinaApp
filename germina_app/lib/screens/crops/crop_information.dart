@@ -178,7 +178,7 @@ class _CropInformationState extends State<CropInformation> {
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
                       'Idade do Cultivo : ' +
-                          calculateAge(currentCrop.age) +
+                          calculateAge(currentCrop.dateOfCreation) +
                           ' dias',
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.w300),

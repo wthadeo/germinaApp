@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:germina_app/constants.dart';
 import 'package:germina_app/repositories/crops_repository.dart';
+import 'package:germina_app/repositories/devices_repository.dart';
 import 'package:germina_app/repositories/irrigations_repository.dart';
 import 'package:germina_app/repositories/nutrients_repository.dart';
 import 'package:germina_app/repositories/sensors_repository.dart';
 import 'package:germina_app/screens/crops/crops.dart';
+import 'package:germina_app/screens/devices/devices.dart';
 import 'package:germina_app/screens/home_page.dart';
 import 'package:germina_app/screens/intro_page.dart';
 import 'package:germina_app/screens/irrigations/irrigations.dart';
 import 'package:germina_app/screens/nutrients/nutrients.dart';
 import 'package:germina_app/screens/reports/reports.dart';
+import 'package:germina_app/screens/reports/reports_crops.dart';
 import 'package:germina_app/screens/sensors/sensors.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +21,9 @@ void main() {
     providers: [
       ChangeNotifierProvider<SensorsRepository>(
         create: (context) => SensorsRepository(),
+      ),
+      ChangeNotifierProvider<DevicesRepository>(
+        create: (context) => DevicesRepository(),
       ),
       ChangeNotifierProvider<CropsRepository>(
         create: (context) => CropsRepository(),
@@ -49,6 +55,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const IntroPage(),
         '/homePage': (context) => const HomePage(),
+        //ROTAS DAS PAGINAS DE DISPOSITIVOS
+        '/devices': (context) => const DevicesPage(),
         //ROTAS DAS PAGINAS DE SENSORES
         '/sensors': (context) => const SensorsPage(),
         //ROTAS DAS PAGINAS DE IRRIGAÇÕES
@@ -59,6 +67,12 @@ class MyApp extends StatelessWidget {
         '/nutrients': (context) => const NutrientsPage(),
         //ROTAS DAS PAGINAS DE RELATÓRIOS
         '/reports': (context) => const ReportsPage(),
+        '/reportsCrops': (context) => const ReportsCrops(),
+        /* '/allCropsReport' :(context) => const ReportsAllCrops(),
+        '/reportsNutrients' :(context) => const ReportsNutrients(),
+        '/buyNutrients' :(context) => const ReportsBuyNutrients(),
+        '/reportsIrrigations' :(context) => const ReportsIrrigations(),
+        '/expenseReport' :(context) => const ExpenseReport(),*/
       },
     );
   }

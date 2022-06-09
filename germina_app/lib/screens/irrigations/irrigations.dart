@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:germina_app/communicator/communicator.dart';
 import 'package:germina_app/models/irrigation.dart';
 import 'package:germina_app/repositories/irrigations_repository.dart';
-import 'package:germina_app/screens/irrigations/irrigations_add.dart';
 import 'package:germina_app/screens/irrigations/irrigations_information.dart';
+import 'package:germina_app/screens/irrigations/irrigations_start.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
 
@@ -41,8 +41,8 @@ class _IrrigationsPageState extends State<IrrigationsPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const IrrigationsAdd()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const IrrigationsStart()));
         },
         child: const Icon(
           Icons.add,

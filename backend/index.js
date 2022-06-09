@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 const nutrientModel = require('./models/Nutrient');
 const cropModel = require('./models/Crop');
 const irrigationModel = require('./models/Irrigation');
+const reportCropModel = require('./models/ReportCrop');
+const reportNutrientModel = require('./models/ReportNutrient');
+const reportIrrigationModel = require('./models/ReportIrrigation');
 
 mongoose.connect('mongodb://localhost:27017/germina').then(() => {
     console.log('Database connected');
@@ -13,6 +16,9 @@ mongoose.connect('mongodb://localhost:27017/germina').then(() => {
 const Nutrient = mongoose.model('Nutrient', nutrientModel);
 const Crop = mongoose.model('Crop', cropModel);
 const Irrigation = mongoose.model('Irrigation', irrigationModel);
+const ReportCrop = mongoose.model('ReportCrop', reportCropModel);
+const ReportNutrient = mongoose.model('ReportNutrient', reportNutrientModel);
+const ReportIrrigation = mongoose.model('ReportIrrigation', reportIrrigationModel);
 
 app.use(cors());
 app.use(express.urlencoded())
@@ -45,6 +51,7 @@ app.post('/nutrients', (req, res) => {
 });
 
 app.put('/nutrients', (req, res) => {
+    console.log(req.body);
     Nutrient.findOne({name: req.body.name}).then(nutrient=>{
         nutrient.price = req.body.price;
         nutrient.totalAmount = req.body.totalAmount;
@@ -85,13 +92,15 @@ app.get('/crops', (req, res) => {
 
 app.post('/crops', (req, res) => {
     let name = req.body.name;
+    let dateOfCreation = req.body.dateOfCreation;
     let age = req.body.age;
     let qntOfPlants = req.body.qntOfPlants;
+    let costOfCrop = req.body.costOfCrop;
     let isActive = req.body.isActive;
     let notesCrop = req.body.notesCrop;
 
     let newCrop = new Crop({
-        name, age, qntOfPlants, isActive, notesCrop
+        name, dateOfCreation, age, qntOfPlants, costOfCrop, isActive, notesCrop
     });
 
     newCrop.save().then(response => {
@@ -113,13 +122,14 @@ app.get('/irrigations', (req, res) => {
 app.post('/irrigations', (req, res) => {
     console.log(req.body);
     let name = req.body.name;
+    let dateOfCreation = req.body.dateOfCreation;
     let startHour = req.body.startHour;
-    let startMinutes = req.body.startMinutes;
     let timeToUse = req.body.timeToUse;
+    let waterPrice = req.body.waterPrice;
     let flowRate = req.body.flowRate;
-    let energy = req.body.energy;
+    let energyPrice = req.body.energyPrice;
     let crop = req.body.crop;
-    let sensor = req.body.sensor;
+    let device = req.body.device;
     let nutrient = req.body.nutrient;
     let state = req.body.state;
     let isFinished = req.body.isFinished;
@@ -127,13 +137,14 @@ app.post('/irrigations', (req, res) => {
 
     let newIrrigation = new Irrigation({
         name,
+        dateOfCreation,
         startHour,
-        startMinutes,
         timeToUse,
+        waterPrice,
         flowRate,
-        energy,
+        energyPrice,
         crop,
-        sensor,
+        device,
         nutrient,
         state,
         isFinished,
@@ -145,6 +156,62 @@ app.post('/irrigations', (req, res) => {
     }).catch(error => {
         console.log(error);
         res.send('Erro: ' + error);
+    });
+});
+
+//################################## REPORTS #################################################
+
+app.get('/reportCrop', (req, res) => {
+    ReportCrop.find().then(reportCrop => {
+        res.json(reportCrop);
+    }).catch(error => {
+        res.send('Erro ao carregar os dados');
+    });
+});
+
+app.post('/reportCrop', (req, res)=>{
+    console.log(req.body);
+    let description = req.body.description;
+    let date = req.body.date;
+    let value = req.body.value;
+
+    let newReportCrop = new ReportCrop({
+        description, date, value
+    });
+
+    newReportCrop.save().then(response => {
+        res.send('OK 200');
+    }).catch(error => {
+        res.send('Erro' + error);
+    });
+});
+
+app.get('/reportIrrigation', (req, res) => {
+    ReportIrrigation.find().then(reportIrrigation => {
+        res.json(reportIrrigation);
+    }).catch(error => {
+        res.send('Erro ao carregar os dados');
+    });
+});
+
+app.post('/reportIrrigation', (req, res)=>{
+    console.log(req.body);
+    let description = req.body.description;
+    let date = req.body.date;
+    let cropUsed = req.body.cropUsed;
+    let waterSpended = req.body.waterSpended;
+    let energySpended = req.body.energySpended;
+    let nutrientSpended = req.body.nutrientSpended;
+    let totalSpended = req.body.totalSpended;
+
+    let newReportIrrigation = new ReportIrrigation({
+        description, date, cropUsed, waterSpended, energySpended, nutrientSpended, totalSpended
+    });
+
+    newReportIrrigation.save().then(response => {
+        res.send('OK 200');
+    }).catch(error => {
+        res.send('Erro' + error);
     });
 });
 

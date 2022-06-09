@@ -1,17 +1,18 @@
 import 'package:germina_app/models/crop.dart';
+import 'package:germina_app/models/device.dart';
 import 'package:germina_app/models/notification.dart';
 import 'package:germina_app/models/nutrient.dart';
-import 'package:germina_app/models/sensors/sensor.dart';
 
 class Irrigation {
   String name;
-  int startHour;
-  int startMinutes;
+  String dateOfCreation;
+  String startHour;
   int timeToUse;
+  double waterPrice;
   int flowRate;
-  double energy;
+  double energyPrice;
   List<Crop> crop;
-  List<Sensor> sensor;
+  List<Device> device;
   List<Nutrient> nutrient;
   bool state;
   bool isFinished;
@@ -19,38 +20,60 @@ class Irrigation {
 
   Irrigation(
       {required this.name,
+      required this.dateOfCreation,
       required this.startHour,
-      required this.startMinutes,
       required this.timeToUse,
+      required this.waterPrice,
       required this.flowRate,
-      required this.energy,
+      required this.energyPrice,
       required this.crop,
-      required this.sensor,
+      required this.device,
       required this.nutrient,
       required this.state,
       required this.isFinished,
       required this.listOfNotifications});
 
+  double waterExpenses(double waterPrice, int duration, int flowRate) {
+    double result;
+
+    result = (((duration / 60) * flowRate) / 1000) * waterPrice;
+
+    return result;
+  }
+
+  double energyExpenses(double energyPrice, int duration) {
+    double result;
+
+    result = (duration / 60) * energyPrice;
+
+    return result;
+  }
+
+  double nutrientExpenses(List<Nutrient> nutrients, List<int> values) {
+    return 200;
+  }
+
   factory Irrigation.fromJson(Map<String, dynamic> json) {
     var listCrops = json['crop'] as List;
-    var listSensors = json['sensor'] as List;
+    var listDevices = json['device'] as List;
     var listNutrients = json['nutrient'] as List;
 
     List<Crop> _crops = listCrops.map((v) => Crop.fromJson(v)).toList();
-    List<Sensor> _sensors = listSensors.map((v) => Sensor.fromJson(v)).toList();
+    List<Device> _devices = listDevices.map((v) => Device.fromJson(v)).toList();
     List<Nutrient> _nutrients =
         listNutrients.map((v) => Nutrient.fromJson(v)).toList();
     List<Notification> _notifications = [];
 
     return Irrigation(
         name: json['name'],
+        dateOfCreation: json['dateOfCreation'],
         startHour: json['startHour'],
-        startMinutes: json['startMinutes'],
         timeToUse: json['timeToUse'],
+        waterPrice: json['waterPrice'].toDouble(),
         flowRate: json['flowRate'],
-        energy: json['energy'].toDouble(),
+        energyPrice: json['energyPrice'].toDouble(),
         crop: _crops,
-        sensor: _sensors,
+        device: _devices,
         nutrient: _nutrients,
         state: json['state'],
         isFinished: json['isFinished'],
@@ -60,82 +83,18 @@ class Irrigation {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
+    data['dateOfCreation'] = dateOfCreation;
     data['startHour'] = startHour;
-    data['startMinutes'] = startMinutes;
     data['timeToUse'] = timeToUse;
+    data['waterPrice'] = waterPrice;
     data['flowRate'] = flowRate;
-    data['energy'] = energy;
+    data['energyPrice'] = energyPrice;
     data['crop'] = crop.map((v) => v.toJson()).toList();
-    data['sensor'] = sensor.map((v) => v.toJson()).toList();
+    data['device'] = device.map((v) => v.toJson()).toList();
     data['nutrient'] = nutrient.map((v) => v.toJson()).toList();
     data['state'] = state;
     data['isFinished'] = isFinished;
     data['listOfNotifications'] = [];
     return data;
   }
-
-  /*
-  factory Irrigation.fromJson(dynamic json) {
-    if (json['listOfNotifications'] != null) {
-      var noteObjsJson = json['listOfNotifications'] as List;
-      var sensorObjsJson = json['sensor'] as List;
-      var nutrientObjsJson = json['nutrient'] as List;
-      var cropObjsJson = json['crop'] as List;
-
-      List<Notification> _notifications = noteObjsJson
-          .map((noteJson) => Notification.fromJson(noteJson))
-          .toList();
-
-      List<Sensor> _sensors = sensorObjsJson
-          .map((sensorJson) => Sensor.fromJson(sensorJson))
-          .toList();
-      List<Nutrient> _nutrients = nutrientObjsJson
-          .map((nutrientJson) => Nutrient.fromJson(nutrientJson))
-          .toList();
-
-      List<Crop> _crops = cropObjsJson.map((cropJson) => Crop.fromJson(cropJson)).toList();
-
-      return Irrigation(
-          name: json['name'] as String,
-          startHour: json['startHour'] as int,
-          startMinutes: json['startMinutes'] as int,
-          timeToUse: json['timeToUse'] as int,
-          flowRate: json['flowRate'] as int,
-          energy: json['timeToUse'].toDouble(),
-          crop: _crops,
-          sensor: _sensors,
-          nutrient: _nutrients,
-          state: json['state'] as bool,
-          listOfNotifications: _notifications);
-    } else {
-      var sensorObjsJson = json['sensor'] as List;
-      var nutrientObjsJson = json['nutrient'] as List;
-      var cropObjsJson = json['crop'] as List;
-
-      List<Sensor> _sensors = sensorObjsJson
-          .map((sensorJson) => Sensor.fromJson(sensorJson))
-          .toList();
-      List<Nutrient> _nutrients = nutrientObjsJson
-          .map((nutrientJson) => Nutrient.fromJson(nutrientJson))
-          .toList();
-
-      List<Crop> _crops = cropObjsJson.map((cropJson) => Crop.fromJson(cropJson)).toList();
-
-      return Irrigation(
-          name: json['name'] as String,
-          startHour: json['startHour'] as int,
-          startMinutes: json['startMinutes'] as int,
-          timeToUse: json['timeToUse'] as int,
-          flowRate: json['flowRate'] as int,
-          energy: json['timeToUse'].toDouble(),
-          crop: _crops,
-          sensor: _sensors,
-          nutrient: _nutrients,
-          state: json['state'] as bool,
-          listOfNotifications: []);
-    }
-  }
-
-  */
-
 }

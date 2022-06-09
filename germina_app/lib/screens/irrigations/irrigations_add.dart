@@ -1,15 +1,16 @@
-import 'dart:convert';
+/*import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:germina_app/constants.dart';
 import 'package:germina_app/models/crop.dart';
+import 'package:germina_app/models/device.dart';
 import 'package:germina_app/models/hour.dart';
 import 'package:germina_app/models/irrigation.dart';
 import 'package:germina_app/models/nutrient.dart';
 import 'package:germina_app/models/sensors/sensor.dart';
 import 'package:germina_app/repositories/crops_repository.dart';
+import 'package:germina_app/repositories/devices_repository.dart';
 import 'package:germina_app/repositories/irrigations_repository.dart';
 import 'package:germina_app/repositories/nutrients_repository.dart';
-import 'package:germina_app/repositories/sensors_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -25,10 +26,10 @@ class IrrigationsAdd extends StatefulWidget {
 class _IrrigationsAddState extends State<IrrigationsAdd> {
   late IrrigationsRepository irrigationsRep;
   List<Crop> currentCrops = CropsRepository.listOfCrops;
-  List<Sensor> currentSensors = SensorsRepository.listOfSensors;
+  List<Device> currentDevices = DevicesRepository.listOfDevices;
   List<Nutrient> currentNutrients = NutrientsRepository.listOfNutrients;
   late Crop cropChoosed = currentCrops[0];
-  late Sensor sensorChosed = currentSensors[0];
+  late Device deviceChosed = currentDevices[0];
   late Nutrient nutrientChosed = currentNutrients[0];
   List<Crop> cropsChoose = [];
   List<Sensor> sensorsChoose = [];
@@ -425,3 +426,4 @@ Future<http.Response> editDb(String object, var url) async {
       body: object);
   return response;
 }
+*/

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:germina_app/models/reports/reportCrop.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../constants.dart';
@@ -19,14 +20,21 @@ class CropAdd extends StatefulWidget {
 class _CropAddState extends State<CropAdd> {
   late CropsRepository cropsRep;
   String name = '';
-  final atualDate = DateTime.now();
   String age = '';
   int qntOfPlants = 0;
-  Crop cropAdded =
-      Crop(name: '', age: '', qntOfPlants: 0, isActive: true, notesCrop: []);
+  Crop cropAdded = Crop(
+      name: '',
+      dateOfCreation: '',
+      age: '',
+      qntOfPlants: 0,
+      costOfCrop: 0,
+      isActive: true,
+      notesCrop: []);
+  ReportCrop initialReport = ReportCrop(description: '', date: '', value: 0);
   List<Crop> crops = CropsRepository.listOfCrops;
 
   var url = homeCropsUrl;
+  var urlReport = Uri.parse('http://192.168.0.113:3000/reportCrop');
 
   var maskFormatter = MaskTextInputFormatter(
       mask: '##-##-####',
@@ -102,16 +110,22 @@ class _CropAddState extends State<CropAdd> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     )),
                 onPressed: () async {
+                  initialReport =
+                      ReportCrop(description: name, date: age, value: 0);
                   cropAdded = Crop(
                       name: name,
-                      age: age,
+                      dateOfCreation: age,
+                      age: calculateAge(age),
                       qntOfPlants: qntOfPlants,
+                      costOfCrop: 0,
                       isActive: true,
                       notesCrop: []);
                   crops.add(cropAdded);
                   // ignore: unused_local_variable
                   http.Response saveToDB =
                       await saveToDb(json.encode(cropAdded.toJson()), url);
+                  saveToDB = await saveToDb(
+                      json.encode(initialReport.toJson()), urlReport);
                   cropsRep.saveAll(crops);
                   Navigator.pop(context);
                 },
@@ -132,4 +146,20 @@ Future<http.Response> saveToDb(String crop, var url) async {
   return response;
 }
 
+String calculateAge(final initialAge) {
+  List<String> split = initialAge.toString().split('-');
+  int year, month, day;
+  year = int.parse(split[0]);
+  // ignore: unnecessary_type_check
+  assert(year is int);
+  month = int.parse(split[1]);
+  // ignore: unnecessary_type_check
+  assert(month is int);
+  day = int.parse(split[2]);
+  // ignore: unnecessary_type_check
+  assert(day is int);
+  final atual = DateTime.now();
+  final initial = DateTime(day, month, year);
+  return atual.difference(initial).inDays.toString();
+}
 //'notesCrop': jsonEncode({"name": "was", "description": "desc", "date": "22-10-2021"})

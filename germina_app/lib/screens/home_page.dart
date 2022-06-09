@@ -19,35 +19,6 @@ class _HomePageState extends State<HomePage> {
   // ignore: prefer_typing_uninitialized_variables
   late final dataFromApi;
 
-  /*int _soilMoisture = 0;
-  int _drySoil = 0;
-  double _temperature = 0;
-  double _humidity = 0;
-
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      final more4iot = More4iotMqtt(host: '192.168.0.113');
-      more4iot.connect(germina, 'application');
-    });
-  }
-
-  void germina(Scope scope) {
-    final soilMoisture = scope.getData<int>('soil-moisture');
-    final temperature = scope.getData<double>('temperature');
-    final humidity = scope.getData<double>('humidity');
-    final drySoil = scope.getCommand<int>('dry-soil');
-
-    print('SCOPE: $soilMoisture  $temperature  $humidity  $drySoil');
-
-    setState(() {
-      _soilMoisture = soilMoisture;
-      _temperature = temperature;
-      _humidity = humidity;
-      _drySoil = drySoil;
-    });
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,24 +41,10 @@ class _HomePageState extends State<HomePage> {
             IrrigationsRepository.listOfIrrigations = snapshot.data?[0]!;
             CropsRepository.listOfCrops = snapshot.data?[1]!;
             NutrientsRepository.listOfNutrients = snapshot.data?[2]!;
-            /*SensorsRepository.listOfSensors = [
-              SoilSensor(_soilMoisture,
-                  name: 'sensor_soil',
-                  protocol: 'mqtt',
-                  uri: 'unknown uri',
-                  category: 'soilSensor'),
-              TempSensor(
-                _temperature,
-                _humidity,
-                name: 'sensor_temperature',
-                protocol: 'mqtt',
-                uri: 'unknown uri',
-              )
-            ];*/
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  buttonMenu('Sensores', context, '/sensors'),
+                  buttonMenu('Dispositivos', context, '/devices'),
                   buttonMenu('Cultivos', context, '/crops'),
                   buttonMenu('Nutrientes', context, '/nutrients'),
                   buttonMenu('Irrigações', context, '/irrigations'),

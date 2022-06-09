@@ -8,19 +8,26 @@ class Communicator {
       Sensor(name: '', protocol: '', uri: '', category: '');
   static Irrigation currentIrrigator = Irrigation(
       name: '',
-      startHour: 0,
-      startMinutes: 0,
+      dateOfCreation: '',
+      startHour: '',
       timeToUse: 0,
+      waterPrice: 0,
       flowRate: 0,
-      energy: 0,
+      energyPrice: 0,
       crop: [],
-      sensor: [],
+      device: [],
       nutrient: [],
       state: false,
       isFinished: false,
       listOfNotifications: []);
-  static Crop currentCrop =
-      Crop(name: '', age: '', qntOfPlants: 0, isActive: false, notesCrop: []);
+  static Crop currentCrop = Crop(
+      name: '',
+      dateOfCreation: '',
+      age: '',
+      qntOfPlants: 0,
+      costOfCrop: 0,
+      isActive: false,
+      notesCrop: []);
   static Nutrient currentNutrient =
       Nutrient(name: '', priceMg: 0.0, totalAmount: 0);
   //static Report currentReport;
