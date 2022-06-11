@@ -24,12 +24,12 @@ class _ReportsPageState extends State<ReportsPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            buttonMenu('Dispositivos', context, '/devices'),
-            buttonMenu('Dispositivos', context, '/devices'),
-            buttonMenu('Dispositivos', context, '/devices'),
-            buttonMenu('Dispositivos', context, '/devices'),
-            buttonMenu('Dispositivos', context, '/devices'),
-            buttonMenu('Dispositivos', context, '/devices'),
+            buttonMenu('Todos Cultivos', context, '/reportsCrops'),
+            buttonMenu('Gastos com Cultivos', context, '/reportsCrops'),
+            buttonMenu('Gastos com Nutrientes', context, '/reportsCrops'),
+            buttonMenu('Compra de Nutrientes', context, '/reportsCrops'),
+            buttonMenu('Todas Irrigações', context, '/reportsCrops'),
+            buttonMenu('Relatório Geral de Gastos', context, '/reportsCrops'),
           ],
         ),
       ),

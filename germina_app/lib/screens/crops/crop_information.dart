@@ -169,7 +169,7 @@ class _CropInformationState extends State<CropInformation> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      'Data de Inserção: ' + currentCrop.age,
+                      'Data de Inserção: ' + currentCrop.dateOfCreation,
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.w300),
                     ),
@@ -177,9 +177,7 @@ class _CropInformationState extends State<CropInformation> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      'Idade do Cultivo : ' +
-                          calculateAge(currentCrop.dateOfCreation) +
-                          ' dias',
+                      'Idade do Cultivo : ' + currentCrop.age + ' dias',
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.w300),
                     ),
