@@ -19,7 +19,10 @@ var homeCropsUrlConclude =
     Uri.parse('http://192.168.0.113:3000/crops/conclude');
 var homeCropsUrlNote = Uri.parse('http://192.168.0.113:3000/crops/addNote');
 var homeNutrientsUrl = Uri.parse('http://192.168.0.113:3000/nutrients');
-
+var reportsCropsUrl = Uri.parse('http://192.168.0.113:3000/reportCrop');
+var reportsIrrigationsUrl =
+    Uri.parse('http://192.168.0.113:3000/reportIrrigation');
+var reportsNutrientsUrl = Uri.parse('http://192.168.0.113:3000/reportNutrient');
 Map<int, Color> color = {
   50: const Color.fromRGBO(66, 174, 181, .1),
   100: const Color.fromRGBO(66, 174, 181, .2),

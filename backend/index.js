@@ -186,6 +186,31 @@ app.post('/reportCrop', (req, res)=>{
     });
 });
 
+app.get('/reportNutrient', (req, res) => {
+    ReportNutrient.find().then(reportNutrient => {
+        res.json(reportNutrient);
+    }).catch(error => {
+        res.send('Erro ao carregar os dados');
+    });
+});
+
+app.post('/reportNutrient', (req, res)=>{
+    console.log(req.body);
+    let description = req.body.description;
+    let date = req.body.date;
+    let value = req.body.value;
+
+    let newReportNutrient = new ReportNutrient({
+        description, date, value
+    });
+
+    newReportNutrient.save().then(response => {
+        res.send('OK 200');
+    }).catch(error => {
+        res.send('Erro' + error);
+    });
+});
+
 app.get('/reportIrrigation', (req, res) => {
     ReportIrrigation.find().then(reportIrrigation => {
         res.json(reportIrrigation);

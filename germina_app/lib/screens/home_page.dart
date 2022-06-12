@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:germina_app/repositories/crops_repository.dart';
 import 'package:germina_app/repositories/irrigations_repository.dart';
 import 'package:germina_app/repositories/nutrients_repository.dart';
+import 'package:germina_app/repositories/reports_crops_repository.dart';
+import 'package:germina_app/repositories/reports_irrigations_repository.dart';
+import 'package:germina_app/repositories/reports_nutrients_repository.dart';
 import '../constants.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   var urlIrrigations = homeIrrigUrl;
   var urlCrops = homeCropsUrl;
   var urlNutrients = homeNutrientsUrl;
+  var urlReportsCrops = reportsCropsUrl;
 
   // ignore: prefer_typing_uninitialized_variables
   late final dataFromApi;
@@ -34,7 +38,12 @@ class _HomePageState extends State<HomePage> {
         future: dataFromApi = Future.wait([
           IrrigationsRepository.getIrrigationsFromApi(urlIrrigations),
           CropsRepository.getCropsFromApi(urlCrops),
-          NutrientsRepository.getNutrientsFromApi(urlNutrients)
+          NutrientsRepository.getNutrientsFromApi(urlNutrients),
+          ReportsCropsRepository.getReportCropsFromApi(reportsCropsUrl),
+          ReportsIrrigationRepository.getReportIrrigationsFromApi(
+              reportsIrrigationsUrl),
+          ReportsNutrientsRepository.getReportNutrientsFromApi(
+              reportsNutrientsUrl)
         ]),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData) {

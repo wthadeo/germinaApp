@@ -25,7 +25,7 @@ class _ReportsPageState extends State<ReportsPage> {
         child: Column(
           children: [
             buttonMenu('Todos Cultivos', context, '/reportsCrops'),
-            buttonMenu('Gastos com Cultivos', context, '/reportsCrops'),
+            buttonMenu('Gastos com Cultivos', context, '/cropsExpenses'),
             buttonMenu('Gastos com Nutrientes', context, '/reportsCrops'),
             buttonMenu('Compra de Nutrientes', context, '/reportsCrops'),
             buttonMenu('Todas Irrigações', context, '/reportsCrops'),
