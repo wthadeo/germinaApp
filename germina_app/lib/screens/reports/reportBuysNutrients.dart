@@ -1,21 +1,22 @@
+// ignore_for_file: file_names
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:germina_app/models/nutrient.dart';
+import 'package:germina_app/repositories/nutrients_repository.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../constants.dart';
-import '../../models/crop.dart';
-import '../../repositories/crops_repository.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-class ReportsCrops extends StatefulWidget {
-  const ReportsCrops({Key? key}) : super(key: key);
+class ReportsBuyNutrients extends StatefulWidget {
+  const ReportsBuyNutrients({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ReportsCropsState();
-  static final List<Crop> crops = CropsRepository.listOfCrops;
+  State<StatefulWidget> createState() => _ReportsBuyNutrientsState();
+  static final List<Nutrient> nutrients = NutrientsRepository.listOfNutrients;
 }
 
-class _ReportsCropsState extends State<ReportsCrops> {
+class _ReportsBuyNutrientsState extends State<ReportsBuyNutrients> {
   final pw.Document pdf = pw.Document();
 
   @override
@@ -24,7 +25,7 @@ class _ReportsCropsState extends State<ReportsCrops> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          "Relatório de Todos Cultivos",
+          "Compras de Nutrientes",
           style: TextStyle(color: Colors.white, fontSize: 20.0),
         ),
         backgroundColor: primaryColor,
@@ -33,7 +34,7 @@ class _ReportsCropsState extends State<ReportsCrops> {
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: dataTable(ReportsCrops.crops)),
+            child: dataTable(ReportsBuyNutrients.nutrients)),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
@@ -71,76 +72,54 @@ Future<void> saveAndLaunchFile(List<int> bytes, String filename) async {
   OpenFile.open('$path/$filename');
 }
 
-DataTable dataTable(List<Crop> crops) {
+DataTable dataTable(List<Nutrient> nutrients) {
   List<DataRow> rows = [];
 
-  Text isActive(Crop crop) {
-    if (crop.isActive) {
-      return const Text('Ativo');
-    } else {
-      return const Text('Concluido');
+  for (var nutrient in nutrients) {
+    for (var noteNutrient in nutrient.buysNutrient) {
+      rows.add(DataRow(
+        cells: [
+          DataCell(Text(nutrient.name)),
+          DataCell(Text(noteNutrient.quantAdd.toString())),
+          DataCell(Text('R\$ ' + noteNutrient.price.toStringAsFixed(2))),
+          DataCell(Text(noteNutrient.date)),
+        ],
+      ));
     }
   }
 
   // ignore: avoid_function_literals_in_foreach_calls
-  crops.forEach((crop) {
+  /*nutrients.forEach((crop) {
     rows.add(DataRow(cells: [
       DataCell(
         Text(crop.name),
       ),
-      DataCell(
-        Text(crop.dateOfCreation),
-      ),
-      DataCell(
-        Text(crop.age),
-      ),
-      DataCell(
-        Text(crop.qntOfPlants.toString()),
-      ),
-      DataCell(
-        Text('R\$ ' + crop.costOfCrop.toStringAsFixed(2)),
-      ),
-      DataCell(
-        isActive(crop),
-      ),
     ]));
-  });
+  });*/
 
   return DataTable(
     columns: const [
       DataColumn(
         label: Text(
-          'Cultivo',
+          'Nutriente',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       ),
       DataColumn(
         label: Text(
-          'Data de Criação',
+          'Quantidade adicionada (mg)',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       ),
       DataColumn(
         label: Text(
-          'Idade (dias)',
+          'Valor Gasto',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       ),
       DataColumn(
         label: Text(
-          'Quantidade de Plantas',
-          style: TextStyle(fontStyle: FontStyle.italic),
-        ),
-      ),
-      DataColumn(
-        label: Text(
-          'Custo do Cultivo',
-          style: TextStyle(fontStyle: FontStyle.italic),
-        ),
-      ),
-      DataColumn(
-        label: Text(
-          'Estado',
+          'Data da adição',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       ),

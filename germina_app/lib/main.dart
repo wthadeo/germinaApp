@@ -15,9 +15,12 @@ import 'package:germina_app/screens/intro_page.dart';
 import 'package:germina_app/screens/irrigations/irrigations.dart';
 import 'package:germina_app/screens/nutrients/nutrients.dart';
 import 'package:germina_app/screens/reports/crops_expenses.dart';
+import 'package:germina_app/screens/reports/expense_report.dart';
 import 'package:germina_app/screens/reports/nutrients_expenses.dart';
+import 'package:germina_app/screens/reports/reportBuysNutrients.dart';
 import 'package:germina_app/screens/reports/reports.dart';
 import 'package:germina_app/screens/reports/reports_crops.dart';
+import 'package:germina_app/screens/reports/reports_irrigations.dart';
 import 'package:germina_app/screens/sensors/sensors.dart';
 import 'package:provider/provider.dart';
 
@@ -84,9 +87,9 @@ class MyApp extends StatelessWidget {
         '/reportsCrops': (context) => const ReportsCrops(),
         '/cropsExpenses': (context) => const CropsExpenses(),
         '/reportsNutrients': (context) => const NutrientsExpenses(),
-        /*'/buyNutrients' :(context) => const ReportsBuyNutrients(),
-        '/reportsIrrigations' :(context) => const ReportsIrrigations(),
-        '/expenseReport' :(context) => const ExpenseReport(),*/
+        '/reportsIrrigations': (context) => const ReportsIrrigations(),
+        '/buyNutrients': (context) => const ReportsBuyNutrients(),
+        '/expenseReport': (context) => const ExpenseReport(),
       },
     );
   }

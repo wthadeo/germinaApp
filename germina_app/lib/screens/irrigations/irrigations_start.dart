@@ -11,6 +11,9 @@ import 'package:germina_app/repositories/crops_repository.dart';
 import 'package:germina_app/repositories/devices_repository.dart';
 import 'package:germina_app/repositories/irrigations_repository.dart';
 import 'package:germina_app/repositories/nutrients_repository.dart';
+import 'package:germina_app/repositories/reports_crops_repository.dart';
+import 'package:germina_app/repositories/reports_irrigations_repository.dart';
+import 'package:germina_app/repositories/reports_nutrients_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +27,9 @@ class IrrigationsStart extends StatefulWidget {
 
 class _IrrigationsStartState extends State<IrrigationsStart> {
   late IrrigationsRepository irrigationsRep;
+  late ReportsCropsRepository reportCropsRep;
+  late ReportsIrrigationRepository reportIrrigationsRep;
+  late ReportsNutrientsRepository reportNutrientesRep;
   List<Crop> currentCrops = CropsRepository.listOfCrops;
   List<Device> currentDevices = DevicesRepository.listOfDevices;
   List<Nutrient> currentNutrients = NutrientsRepository.listOfNutrients;
@@ -67,11 +73,19 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
   var urlCropReport = Uri.parse('http://192.168.0.113:3000/reportCrop');
   var urlIrrigationReport =
       Uri.parse('http://192.168.0.113:3000/reportIrrigation');
+  var urlNutrientReport = Uri.parse('http://192.168.0.113:3000/reportNutrient');
+  var urlCropUpdate = Uri.parse('http://192.168.0.113:3000/crops/changeValue');
   int qntNutriente = 0;
   bool buttonNewNutrient = true;
   bool buttonFinishNutrient = true;
   double nutrientPrice = 0;
+  List<ReportCrop> reportsCrops = ReportsCropsRepository.listOfReportsCrops;
   ReportCrop cropReport = ReportCrop(description: '', date: '', value: 0);
+  List<ReportCrop> reportsNutrients =
+      ReportsNutrientsRepository.listOfReportsNutrients;
+  ReportCrop nutrientReport = ReportCrop(description: '', date: '', value: 0);
+  List<ReportIrrigation> reportsIrrigations =
+      ReportsIrrigationRepository.listOfReportsIrrigations;
   ReportIrrigation irrigationReport = ReportIrrigation(
       description: '',
       date: '',
@@ -87,12 +101,26 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
   @override
   Widget build(BuildContext context) {
     irrigationsRep = Provider.of<IrrigationsRepository>(context);
+    reportCropsRep = Provider.of<ReportsCropsRepository>(context);
+    reportIrrigationsRep = Provider.of<ReportsIrrigationRepository>(context);
+    reportNutrientesRep = Provider.of<ReportsNutrientsRepository>(context);
 
     var _itemsCrop = currentCrops.map((crop) {
-      return DropdownMenuItem<Crop>(
-        child: Text(crop.name),
-        value: crop,
-      );
+      if (crop.isActive) {
+        return DropdownMenuItem<Crop>(
+          child: Text(crop.name),
+          value: crop,
+        );
+      } else {
+        return DropdownMenuItem<Crop>(
+          child: Text(
+            crop.name,
+            style: const TextStyle(color: Colors.green),
+          ),
+          value: crop,
+          enabled: false,
+        );
+      }
     }).toList();
 
     var _itemsDevice = currentDevices.map((device) {
@@ -103,10 +131,21 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
     }).toList();
 
     var _itemsNutrient = currentNutrients.map((nutrient) {
-      return DropdownMenuItem<Nutrient>(
-        child: Text(nutrient.name),
-        value: nutrient,
-      );
+      if (nutrient.totalAmount <= 0) {
+        return DropdownMenuItem<Nutrient>(
+          child: Text(
+            nutrient.name,
+            style: const TextStyle(color: Colors.red),
+          ),
+          value: nutrient,
+          enabled: false,
+        );
+      } else {
+        return DropdownMenuItem<Nutrient>(
+          child: Text(nutrient.name),
+          value: nutrient,
+        );
+      }
     }).toList();
 
     Widget listNutrients() {
@@ -393,6 +432,16 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                                 buttonFinishNutrient = !buttonFinishNutrient;
                                 nutrientPrice = nutrientPrice +
                                     (nutrientChosed.priceMg * qntNutriente);
+                                nutrientReport = ReportCrop(
+                                    description: nutrientChosed.name,
+                                    date: dateOfCreation,
+                                    value: nutrientPrice);
+                                reportsNutrients.add(nutrientReport);
+                                http.Response saveReportNutrient =
+                                    await saveToDb(
+                                        json.encode(nutrientReport.toJson()),
+                                        urlNutrientReport);
+                                reportNutrientesRep.saveAll(reportsNutrients);
                                 print(nutrientPrice);
 
                                 http.Response editNutrient = await editDb(
@@ -421,6 +470,16 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                                 }
                                 nutrientPrice = nutrientPrice +
                                     (nutrientChosed.priceMg * qntNutriente);
+                                nutrientReport = ReportCrop(
+                                    description: nutrientChosed.name,
+                                    date: dateOfCreation,
+                                    value: nutrientPrice);
+                                reportsNutrients.add(nutrientReport);
+                                http.Response saveReportNutrient =
+                                    await saveToDb(
+                                        json.encode(nutrientReport.toJson()),
+                                        urlNutrientReport);
+                                reportNutrientesRep.saveAll(reportsNutrients);
                                 print(nutrientPrice);
                                 http.Response editNutrient = await editDb(
                                     json.encode(nutrientChosed.toJson()),
@@ -516,6 +575,8 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                             ));
                   } else {
                     irrigations.add(irrigationAdded);
+                    reportsCrops.add(cropReport);
+                    reportsIrrigations.add(irrigationReport);
                     // ignore: unused_local_variable
                     http.Response saveToDB = await saveToDb(
                         json.encode(irrigationAdded.toJson()), url);
@@ -524,7 +585,13 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                     saveToDB = await saveToDb(
                         json.encode(irrigationReport.toJson()),
                         urlIrrigationReport);
+                    cropChoosed.costOfCrop =
+                        cropChoosed.costOfCrop + irrigationReport.totalSpended;
+                    saveToDB = await editDb(
+                        json.encode(cropChoosed.toJson()), urlCropUpdate);
                     irrigationsRep.saveAll(irrigations);
+                    reportCropsRep.saveAll(reportsCrops);
+                    reportIrrigationsRep.saveAll(reportsIrrigations);
                     Navigator.pop(context);
                     //atualizar os nutrientes, diminuindo a quantidade de nutrientes gastos aqui
                   }

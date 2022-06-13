@@ -31,6 +31,11 @@ const irrigationSchema = new mongoose.Schema({
     name: String,
     price: Number,
     totalAmount: Number,
+    buysNutrient: [{
+      quantAdd: Number,
+      price: Number,
+      date: String
+    }]
   }],
   state: Boolean,
   isFinished: Boolean,

@@ -5,8 +5,10 @@ import 'package:germina_app/communicator/communicator.dart';
 import 'package:germina_app/constants.dart';
 import 'package:germina_app/models/note_nutrient.dart';
 import 'package:germina_app/models/nutrient.dart';
+import 'package:germina_app/repositories/nutrients_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class NutrientInformation extends StatefulWidget {
   const NutrientInformation({Key? key}) : super(key: key);
@@ -17,6 +19,7 @@ class NutrientInformation extends StatefulWidget {
 
 class _NutrientInformationState extends State<NutrientInformation> {
   Nutrient currentNutrient = Communicator.currentNutrient;
+  late NutrientsRepository nutrientsRep;
 
   int qntAdd = 0;
   double price = 0;
@@ -34,14 +37,14 @@ class _NutrientInformationState extends State<NutrientInformation> {
     return response;
   }
 
-  void refreshNotes(NoteNutrient note) {
-    setState(() {
-      addNutrientList.add(note);
-    });
+  void refreshNotes() {
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    nutrientsRep = Provider.of<NutrientsRepository>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -161,23 +164,20 @@ class _NutrientInformationState extends State<NutrientInformation> {
                                 children: [
                                   Text(
                                     'Quantidade: ' +
-                                        addNutrientList[note]
-                                            .quantAdd
+                                        currentNutrient
+                                            .buysNutrient[note].quantAdd
                                             .toString(),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     'Valor: ' +
-                                        addNutrientList[note]
-                                            .price
+                                        currentNutrient.buysNutrient[note].price
                                             .toStringAsFixed(2),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     'Data de Cadastro: ' +
-                                        DateFormat('dd-MM-yyyy')
-                                            .format(addNutrientList[note].date)
-                                            .toString(),
+                                        currentNutrient.buysNutrient[note].date,
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
@@ -186,7 +186,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
                             },
                             padding: const EdgeInsets.all(16),
                             separatorBuilder: (_, __) => const Divider(),
-                            itemCount: addNutrientList.length,
+                            itemCount: currentNutrient.buysNutrient.length,
                           ),
                         )),
                   ],
@@ -255,15 +255,22 @@ class _NutrientInformationState extends State<NutrientInformation> {
                                       qntAdd,
                                       price);
                                   addnote = NoteNutrient(
-                                      qntAdd, price, DateTime.now());
-                                  refreshNotes(addnote);
+                                      quantAdd: qntAdd,
+                                      price: price,
+                                      date: DateFormat('dd-MM-yyyy')
+                                          .format(DateTime.now())
+                                          .toString());
+
                                   currentNutrient.totalAmount = qntidade;
                                   currentNutrient.priceMg = valorPago;
+                                  currentNutrient.buysNutrient.add(addnote);
+
                                   // ignore: unused_local_variable
                                   http.Response editNutrient =
                                       await editNutrientDb(
                                           json.encode(currentNutrient.toJson()),
                                           url);
+                                  nutrientsRep.refreshAll();
                                   Navigator.pop(context);
                                 },
                               ),

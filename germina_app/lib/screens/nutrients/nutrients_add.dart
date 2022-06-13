@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:germina_app/constants.dart';
+import 'package:germina_app/models/note_nutrient.dart';
 import 'package:germina_app/models/nutrient.dart';
 import 'package:germina_app/repositories/nutrients_repository.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,7 +21,9 @@ class _NutriendAddState extends State<NutrientAdd> {
   String interval = '';
   int totalAmount = 0;
   double price = 0.0;
-  Nutrient nutrientAdded = Nutrient(name: '', priceMg: 0, totalAmount: 0);
+  NoteNutrient noteAdd = NoteNutrient(quantAdd: 0, price: 0, date: '');
+  Nutrient nutrientAdded =
+      Nutrient(name: '', priceMg: 0, totalAmount: 0, buysNutrient: []);
   List<Nutrient> nutrients = NutrientsRepository.listOfNutrients;
 
   var url = homeNutrientsUrl;
@@ -99,8 +103,18 @@ class _NutriendAddState extends State<NutrientAdd> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     )),
                 onPressed: () async {
+                  noteAdd = NoteNutrient(
+                      quantAdd: totalAmount,
+                      price: price,
+                      date: DateFormat('dd-MM-yyyy')
+                          .format(DateTime.now())
+                          .toString());
                   nutrientAdded = Nutrient(
-                      name: name, totalAmount: totalAmount, priceMg: price);
+                      name: name,
+                      totalAmount: totalAmount,
+                      priceMg: price / totalAmount,
+                      buysNutrient: []);
+                  nutrientAdded.buysNutrient.add(noteAdd);
                   nutrients.add(nutrientAdded);
                   // ignore: unused_local_variable
                   http.Response saveToDB =

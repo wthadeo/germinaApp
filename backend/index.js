@@ -37,9 +37,10 @@ app.post('/nutrients', (req, res) => {
     let name = req.body.name;
     let price = req.body.price;
     let totalAmount = req.body.totalAmount;
+    let buysNutrient = req.body.buysNutrient;
 
     let newNutrient = new Nutrient({
-        name, price, totalAmount
+        name, price, totalAmount, buysNutrient
     });
 
     newNutrient.save().then(response => {
@@ -55,6 +56,7 @@ app.put('/nutrients', (req, res) => {
     Nutrient.findOne({name: req.body.name}).then(nutrient=>{
         nutrient.price = req.body.price;
         nutrient.totalAmount = req.body.totalAmount;
+        nutrient.buysNutrient = req.body.buysNutrient;
         nutrient.save();
         res.send(nutrient);
     }).catch(error => {
@@ -75,6 +77,17 @@ app.put('/crops/conclude', (req, res) => {
 app.put('/crops/addNote', (req, res) => {
     Crop.findOne({name: req.body.name}).then(crop=>{
         crop.notesCrop = req.body.notesCrop;
+        crop.save();
+        res.send(crop);
+    }).catch(error => {
+        res.send('Erro ao carregar o cultivo');
+    });
+});
+
+app.put('/crops/changeValue', (req, res) => {
+    console.log(req.body);
+    Crop.findOne({name: req.body.name}).then(crop=>{
+        crop.costOfCrop = req.body.costOfCrop;
         crop.save();
         res.send(crop);
     }).catch(error => {
@@ -120,7 +133,6 @@ app.get('/irrigations', (req, res) => {
 });
 
 app.post('/irrigations', (req, res) => {
-    console.log(req.body);
     let name = req.body.name;
     let dateOfCreation = req.body.dateOfCreation;
     let startHour = req.body.startHour;
@@ -170,7 +182,6 @@ app.get('/reportCrop', (req, res) => {
 });
 
 app.post('/reportCrop', (req, res)=>{
-    console.log(req.body);
     let description = req.body.description;
     let date = req.body.date;
     let value = req.body.value;
@@ -195,7 +206,6 @@ app.get('/reportNutrient', (req, res) => {
 });
 
 app.post('/reportNutrient', (req, res)=>{
-    console.log(req.body);
     let description = req.body.description;
     let date = req.body.date;
     let value = req.body.value;
@@ -220,7 +230,6 @@ app.get('/reportIrrigation', (req, res) => {
 });
 
 app.post('/reportIrrigation', (req, res)=>{
-    console.log(req.body);
     let description = req.body.description;
     let date = req.body.date;
     let cropUsed = req.body.cropUsed;

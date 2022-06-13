@@ -1,21 +1,23 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:germina_app/models/reports/reportIrrigation.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../constants.dart';
-import '../../models/crop.dart';
-import '../../repositories/crops_repository.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-class ReportsCrops extends StatefulWidget {
-  const ReportsCrops({Key? key}) : super(key: key);
+import '../../repositories/reports_irrigations_repository.dart';
+
+class ReportsIrrigations extends StatefulWidget {
+  const ReportsIrrigations({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ReportsCropsState();
-  static final List<Crop> crops = CropsRepository.listOfCrops;
+  State<StatefulWidget> createState() => _ReportsIrrigationsState();
+  static final List<ReportIrrigation> irrigations =
+      ReportsIrrigationRepository.listOfReportsIrrigations;
 }
 
-class _ReportsCropsState extends State<ReportsCrops> {
+class _ReportsIrrigationsState extends State<ReportsIrrigations> {
   final pw.Document pdf = pw.Document();
 
   @override
@@ -24,7 +26,7 @@ class _ReportsCropsState extends State<ReportsCrops> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          "Relatório de Todos Cultivos",
+          "Relatório de Todas Irrigações",
           style: TextStyle(color: Colors.white, fontSize: 20.0),
         ),
         backgroundColor: primaryColor,
@@ -33,7 +35,7 @@ class _ReportsCropsState extends State<ReportsCrops> {
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: dataTable(ReportsCrops.crops)),
+            child: dataTable(ReportsIrrigations.irrigations)),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
@@ -71,37 +73,32 @@ Future<void> saveAndLaunchFile(List<int> bytes, String filename) async {
   OpenFile.open('$path/$filename');
 }
 
-DataTable dataTable(List<Crop> crops) {
+DataTable dataTable(List<ReportIrrigation> irrigationsReports) {
   List<DataRow> rows = [];
 
-  Text isActive(Crop crop) {
-    if (crop.isActive) {
-      return const Text('Ativo');
-    } else {
-      return const Text('Concluido');
-    }
-  }
-
   // ignore: avoid_function_literals_in_foreach_calls
-  crops.forEach((crop) {
+  irrigationsReports.forEach((report) {
     rows.add(DataRow(cells: [
       DataCell(
-        Text(crop.name),
+        Text(report.description),
       ),
       DataCell(
-        Text(crop.dateOfCreation),
+        Text(report.date),
       ),
       DataCell(
-        Text(crop.age),
+        Text(report.cropUsed),
       ),
       DataCell(
-        Text(crop.qntOfPlants.toString()),
+        Text('R\$ ' + report.waterSpended.toStringAsFixed(2)),
       ),
       DataCell(
-        Text('R\$ ' + crop.costOfCrop.toStringAsFixed(2)),
+        Text('R\$ ' + report.energySpended.toStringAsFixed(2)),
       ),
       DataCell(
-        isActive(crop),
+        Text('R\$ ' + report.nutrientSpended.toStringAsFixed(2)),
+      ),
+      DataCell(
+        Text('R\$ ' + report.totalSpended.toStringAsFixed(2)),
       ),
     ]));
   });
@@ -110,7 +107,7 @@ DataTable dataTable(List<Crop> crops) {
     columns: const [
       DataColumn(
         label: Text(
-          'Cultivo',
+          'Irrigação',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       ),
@@ -122,25 +119,31 @@ DataTable dataTable(List<Crop> crops) {
       ),
       DataColumn(
         label: Text(
-          'Idade (dias)',
+          'Cultivo',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       ),
       DataColumn(
         label: Text(
-          'Quantidade de Plantas',
+          'Gastos com água',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       ),
       DataColumn(
         label: Text(
-          'Custo do Cultivo',
+          'Gastos com Energia',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       ),
       DataColumn(
         label: Text(
-          'Estado',
+          'Gastos com Nutrientes',
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
+      ),
+      DataColumn(
+        label: Text(
+          'Gastos totais',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       ),

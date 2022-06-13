@@ -25,7 +25,7 @@ class _NutrientsExpensesState extends State<NutrientsExpenses> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          "Relatório de Todos Cultivos",
+          "Gastos com Nutrientes",
           style: TextStyle(color: Colors.white, fontSize: 20.0),
         ),
         backgroundColor: primaryColor,
@@ -36,9 +36,10 @@ class _NutrientsExpensesState extends State<NutrientsExpenses> {
             scrollDirection: Axis.horizontal,
             child: dataTable(NutrientsExpenses.reportNutrients)),
       ),
-      /*floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: () async {
+          /*
           pdf.addPage(pw.MultiPage(
               build: (context) => [
                     pw.Table.fromTextArray(
@@ -53,12 +54,13 @@ class _NutrientsExpensesState extends State<NutrientsExpenses> {
           List<int> bytes = await pdf.save();
 
           saveAndLaunchFile(bytes, 'reportCrops');
+        */
         },
         child: const Icon(
           Icons.adobe_outlined,
           color: Colors.white,
         ),
-      ),*/
+      ),
     );
   }
 }
@@ -83,7 +85,7 @@ DataTable dataTable(List<ReportCrop> reportNutrients) {
         Text(report.date),
       ),
       DataCell(
-        Text(report.value.toString()),
+        Text('R\$ ' + report.value.toStringAsFixed(2)),
       )
     ]));
   });
@@ -104,7 +106,7 @@ DataTable dataTable(List<ReportCrop> reportNutrients) {
       ),
       DataColumn(
         label: Text(
-          'Valor (R\$)',
+          'Valor',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       )

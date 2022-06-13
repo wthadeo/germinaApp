@@ -29,7 +29,7 @@ class Communicator {
       isActive: false,
       notesCrop: []);
   static Nutrient currentNutrient =
-      Nutrient(name: '', priceMg: 0.0, totalAmount: 0);
+      Nutrient(name: '', priceMg: 0.0, totalAmount: 0, buysNutrient: []);
   //static Report currentReport;
 
 }

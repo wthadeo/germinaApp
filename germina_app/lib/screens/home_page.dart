@@ -15,10 +15,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var urlIrrigations = homeIrrigUrl;
+  /*var urlIrrigations = homeIrrigUrl;
   var urlCrops = homeCropsUrl;
   var urlNutrients = homeNutrientsUrl;
-  var urlReportsCrops = reportsCropsUrl;
+  var urlReportsCrops = reportsCropsUrl;*/
 
   // ignore: prefer_typing_uninitialized_variables
   late final dataFromApi;
@@ -36,9 +36,9 @@ class _HomePageState extends State<HomePage> {
       ),
       body: FutureBuilder(
         future: dataFromApi = Future.wait([
-          IrrigationsRepository.getIrrigationsFromApi(urlIrrigations),
-          CropsRepository.getCropsFromApi(urlCrops),
-          NutrientsRepository.getNutrientsFromApi(urlNutrients),
+          IrrigationsRepository.getIrrigationsFromApi(homeIrrigUrl),
+          CropsRepository.getCropsFromApi(homeCropsUrl),
+          NutrientsRepository.getNutrientsFromApi(homeNutrientsUrl),
           ReportsCropsRepository.getReportCropsFromApi(reportsCropsUrl),
           ReportsIrrigationRepository.getReportIrrigationsFromApi(
               reportsIrrigationsUrl),
@@ -50,6 +50,11 @@ class _HomePageState extends State<HomePage> {
             IrrigationsRepository.listOfIrrigations = snapshot.data?[0]!;
             CropsRepository.listOfCrops = snapshot.data?[1]!;
             NutrientsRepository.listOfNutrients = snapshot.data?[2]!;
+            ReportsCropsRepository.listOfReportsCrops = snapshot.data?[3]!;
+            ReportsIrrigationRepository.listOfReportsIrrigations =
+                snapshot.data?[4]!;
+            ReportsNutrientsRepository.listOfReportsNutrients =
+                snapshot.data?[5]!;
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[

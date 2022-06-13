@@ -1,8 +1,23 @@
 class NoteNutrient {
   int quantAdd;
   double price;
-  // ignore: prefer_typing_uninitialized_variables
-  final date;
+  String date;
 
-  NoteNutrient(this.quantAdd, this.price, this.date);
+  NoteNutrient(
+      {required this.quantAdd, required this.price, required this.date});
+
+  factory NoteNutrient.fromJson(Map<String, dynamic> json) {
+    return NoteNutrient(
+        quantAdd: json['quantAdd'],
+        price: json['price'].toDouble(),
+        date: json['date']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['quantAdd'] = quantAdd;
+    data['price'] = price;
+    data['date'] = date;
+    return data;
+  }
 }
