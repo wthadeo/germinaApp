@@ -67,7 +67,7 @@ class _NutriendAddState extends State<NutrientAdd> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    labelText: 'Quantidade',
+                    labelText: 'Quantidade em mg',
                   )),
             ),
             Padding(
@@ -87,7 +87,7 @@ class _NutriendAddState extends State<NutrientAdd> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    labelText: 'Preço',
+                    labelText: 'Preço em R\$',
                   )),
             ),
             const SizedBox(

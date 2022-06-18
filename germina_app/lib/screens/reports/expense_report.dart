@@ -251,6 +251,7 @@ DataTable dataTable(
 
 DataTable tableResult(List<ReportIrrigation> irrigationsReports,
     List<Nutrient> nutrients, double totalExpense) {
+  // ignore: avoid_function_literals_in_foreach_calls
   irrigationsReports.forEach((report) {
     totalExpense = totalExpense + report.totalSpended;
   });

@@ -5,6 +5,7 @@ import 'package:germina_app/models/sensors/sensor.dart';
 import 'package:germina_app/repositories/sensors_repository.dart';
 import 'package:germina_app/screens/sensors/sensor_add.dart';
 import 'package:germina_app/screens/sensors/sensor_information.dart';
+import 'package:more4iot_dart_api/more4iot_dart_api.dart';
 import 'package:provider/provider.dart';
 
 class SensorsPage extends StatefulWidget {
@@ -17,6 +18,15 @@ class SensorsPage extends StatefulWidget {
 class _SensorsPageState extends State<SensorsPage> {
   late SensorsRepository sensorsRep;
   static List<Sensor> sensors = SensorsRepository.listOfSensors;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final more4iot = More4iotMqtt(host: '192.168.0.113');
+      more4iot.connect(germina, 'application');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +61,25 @@ class _SensorsPageState extends State<SensorsPage> {
         ),
       ),
     );
+  }
+
+  void germina(Scope scope) {
+    final soilMoisture = scope.getData<int>('soil-moisture');
+    final temperature = scope.getData<int>('temperature');
+    final humidity = scope.getData<int>('humidity');
+    //final drySoil = scope.getCommand<int>('dry-soil');
+
+    // ignore: avoid_print
+    print('SCOPE: $soilMoisture  $temperature  $humidity  ');
+
+    if (mounted) {
+      setState(() {
+        Communicator.soilMoisture = soilMoisture;
+        Communicator.temperature = temperature;
+        Communicator.umidity = humidity;
+        //Communicator.drySoil = drySoil;
+      });
+    }
   }
 }
 

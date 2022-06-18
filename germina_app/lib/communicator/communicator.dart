@@ -30,6 +30,13 @@ class Communicator {
       notesCrop: []);
   static Nutrient currentNutrient =
       Nutrient(name: '', priceMg: 0.0, totalAmount: 0, buysNutrient: []);
+
+  //variaveis MORE4IoT
+  static int soilMoisture = 0;
+  static int temperature = 0;
+  static int umidity = 0;
+  static int drySoil = 1;
+
   //static Report currentReport;
 
 }

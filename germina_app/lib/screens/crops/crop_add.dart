@@ -41,6 +41,8 @@ class _CropAddState extends State<CropAdd> {
       filter: {"#": RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy);
 
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     cropsRep = Provider.of<CropsRepository>(context);
@@ -87,9 +89,12 @@ class _CropAddState extends State<CropAdd> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 10.0),
               child: TextField(
+                  controller: _controller,
                   onChanged: (text) {
-                    qntOfPlants = int.parse(text);
+                    qntOfPlants = int.parse(_controller.text);
                   },
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -124,8 +129,6 @@ class _CropAddState extends State<CropAdd> {
                   // ignore: unused_local_variable
                   http.Response saveToDB =
                       await saveToDb(json.encode(cropAdded.toJson()), url);
-                  saveToDB = await saveToDb(
-                      json.encode(initialReport.toJson()), urlReport);
                   cropsRep.saveAll(crops);
                   Navigator.pop(context);
                 },

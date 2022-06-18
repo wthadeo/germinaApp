@@ -56,8 +56,6 @@ class _IrrigationsPageState extends State<IrrigationsPage> {
 // ignore: non_constant_identifier_names
 Widget IrrigationView(int index, dynamic context) {
   String name = _IrrigationsPageState.irrigations[index].name;
-  bool active = _IrrigationsPageState.irrigations[index].state;
-  bool isFinished = _IrrigationsPageState.irrigations[index].isFinished;
 
   return GestureDetector(
     onTap: () {
@@ -87,19 +85,12 @@ Widget IrrigationView(int index, dynamic context) {
           const SizedBox(
             height: 15.0,
           ),
-          Text(
-            isActive(active, isFinished),
-            style: TextStyle(
-                color: activeColor(active, isFinished),
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500),
-          ),
         ],
       ),
     ),
   );
 }
-
+/*
 Color activeColor(bool active, isFinished) {
   if (isFinished) {
     return Colors.red;
@@ -117,6 +108,6 @@ String isActive(bool isActive, bool isFinished) {
   } else if (!isActive && !isFinished) {
     return "Desativada";
   } else {
-    return "Finalizada";
+    return "Em Uso";
   }
-}
+}*/

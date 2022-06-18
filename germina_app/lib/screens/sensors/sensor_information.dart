@@ -5,7 +5,6 @@ import 'package:germina_app/constants.dart';
 import 'package:germina_app/models/sensors/sensor.dart';
 import 'package:germina_app/models/sensors/soil_sensor.dart';
 import 'package:germina_app/models/sensors/temp_sensor.dart';
-import 'package:more4iot_dart_api/more4iot_dart_api.dart';
 
 class SensorInformation extends StatefulWidget {
   const SensorInformation({Key? key}) : super(key: key);
@@ -17,19 +16,14 @@ class SensorInformation extends StatefulWidget {
 class _SensorInformationState extends State<SensorInformation> {
   Sensor currentSensor = Communicator.currentSensor;
 
-  int _soilMoisture = 0;
-  //int _drySoil = 0;
-  int _temperature = 0;
-  int _humidity = 0;
-
-  @override
+  /*@override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       final more4iot = More4iotMqtt(host: '192.168.0.113');
       more4iot.connect(germina, 'application');
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +40,7 @@ class _SensorInformationState extends State<SensorInformation> {
     );
   }
 
-  void germina(Scope scope) {
+  /*void germina(Scope scope) {
     final soilMoisture = scope.getData<int>('soil-moisture');
     final temperature = scope.getData<int>('temperature');
     final humidity = scope.getData<int>('humidity');
@@ -56,18 +50,18 @@ class _SensorInformationState extends State<SensorInformation> {
     print('SCOPE: $soilMoisture  $temperature  $humidity  ');
 
     setState(() {
-      _soilMoisture = soilMoisture;
-      _temperature = temperature;
-      _humidity = humidity;
+      Communicator.soilMoisture = soilMoisture;
+      Communicator.temperature = temperature;
+      Communicator.umidity = humidity;
       //_drySoil = drySoil;
     });
-  }
+  }*/
 
   Widget bodyFactory(dynamic context) {
     if (Communicator.currentSensor.category == 'tempSensor') {
       TempSensor tmp = Communicator.currentSensor as TempSensor;
-      tmp.temperature = _temperature;
-      tmp.umidity = _humidity;
+      tmp.temperature = Communicator.temperature;
+      tmp.umidity = Communicator.umidity;
       //dispose();
       return Center(
         child: Column(
@@ -133,7 +127,7 @@ class _SensorInformationState extends State<SensorInformation> {
     } else {
       //dispose();
       SoilSensor soil = Communicator.currentSensor as SoilSensor;
-      soil.dataSoil = _soilMoisture;
+      soil.dataSoil = Communicator.soilMoisture;
 
       return SizedBox(
         height: 300,

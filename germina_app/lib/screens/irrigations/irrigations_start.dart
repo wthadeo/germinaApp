@@ -75,6 +75,8 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
       Uri.parse('http://192.168.0.113:3000/reportIrrigation');
   var urlNutrientReport = Uri.parse('http://192.168.0.113:3000/reportNutrient');
   var urlCropUpdate = Uri.parse('http://192.168.0.113:3000/crops/changeValue');
+  var onOffEsp = Uri.parse('http://192.168.0.113:3000/esp32');
+  var obj = {"name": "esp32", "drySoil": 1};
   int qntNutriente = 0;
   bool buttonNewNutrient = true;
   bool buttonFinishNutrient = true;
@@ -161,7 +163,6 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                   nutrientChosed = newVal!;
                   nutrientsChoose.clear();
                   nutrientsChoose.add(nutrientChosed);
-                  print(nutrientsChoose[0].name);
                 }),
                 value: nutrientChosed,
               ),
@@ -421,8 +422,6 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                             : () async {
                                 tempNut.add(nutrientChosed);
                                 tempqnt.add(qntNutriente);
-                                print(tempNut);
-                                print(tempqnt);
                                 nutrientChosed.totalAmount =
                                     nutrientChosed.totalAmount - qntNutriente;
 
@@ -437,13 +436,14 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                                     date: dateOfCreation,
                                     value: nutrientPrice);
                                 reportsNutrients.add(nutrientReport);
+                                // ignore: unused_local_variable
                                 http.Response saveReportNutrient =
                                     await saveToDb(
                                         json.encode(nutrientReport.toJson()),
                                         urlNutrientReport);
                                 reportNutrientesRep.saveAll(reportsNutrients);
-                                print(nutrientPrice);
 
+                                // ignore: unused_local_variable
                                 http.Response editNutrient = await editDb(
                                     json.encode(nutrientChosed.toJson()),
                                     urlUpdateNutrients);
@@ -461,8 +461,6 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                                 test.add(listNutrients());
                                 tempNut.add(nutrientChosed);
                                 tempqnt.add(qntNutriente);
-                                print(tempNut);
-                                print(tempqnt);
                                 nutrientChosed.totalAmount =
                                     nutrientChosed.totalAmount - qntNutriente;
                                 if (test.length >= currentNutrients.length) {
@@ -475,12 +473,13 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                                     date: dateOfCreation,
                                     value: nutrientPrice);
                                 reportsNutrients.add(nutrientReport);
+                                // ignore: unused_local_variable
                                 http.Response saveReportNutrient =
                                     await saveToDb(
                                         json.encode(nutrientReport.toJson()),
                                         urlNutrientReport);
                                 reportNutrientesRep.saveAll(reportsNutrients);
-                                print(nutrientPrice);
+                                // ignore: unused_local_variable
                                 http.Response editNutrient = await editDb(
                                     json.encode(nutrientChosed.toJson()),
                                     urlUpdateNutrients);
@@ -519,7 +518,7 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                       crop: cropsChoose,
                       device: devicesChoose,
                       nutrient: tempNut,
-                      state: false,
+                      state: true,
                       isFinished: false,
                       listOfNotifications: []);
                   energyPrice =
@@ -589,6 +588,7 @@ class _IrrigationsStartState extends State<IrrigationsStart> {
                         cropChoosed.costOfCrop + irrigationReport.totalSpended;
                     saveToDB = await editDb(
                         json.encode(cropChoosed.toJson()), urlCropUpdate);
+                    saveToDB = await editDb(json.encode(obj), onOffEsp);
                     irrigationsRep.saveAll(irrigations);
                     reportCropsRep.saveAll(reportsCrops);
                     reportIrrigationsRep.saveAll(reportsIrrigations);
@@ -622,46 +622,3 @@ Future<http.Response> editDb(String object, var url) async {
       body: object);
   return response;
 }
-
-/* 
-
-    final _itensNutrient = currentNutrients
-        .map((nutrient) => MultiSelectItem<Nutrient>(nutrient, nutrient.name))
-        .toList();
-
-
-
-MultiSelectDialogField(
-                items: _itensNutrient,
-                title: const Text("Nutrients"),
-                selectedColor: Colors.blue,
-                decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
-                  borderRadius: const BorderRadius.all(Radius.circular(40)),
-                  border: Border.all(
-                    color: Colors.blue,
-                    width: 2,
-                  ),
-                ),
-                buttonIcon: const Icon(
-                  Icons.arrow_downward,
-                  color: Colors.blue,
-                ),
-                buttonText: Text(
-                  "Escolher Nutrientes",
-                  style: TextStyle(
-                    color: Colors.blue[800],
-                    fontSize: 16,
-                  ),
-                ),
-                onConfirm: (results) {
-                  nutrientsChoose = [];
-                  // ignore: avoid_function_literals_in_foreach_calls
-                  results.forEach((nutrient) {
-                    nutrientsChoose.add(nutrient as Nutrient);
-                  });
-                  // ignore: avoid_print
-                  print(nutrientsChoose.toString());
-                  //cropsChoose = results;
-                },
-              ),*/

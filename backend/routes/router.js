@@ -1,14 +1,14 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
+/*const express = require('express');
+const router = express.Router();
+
 const mongoose = require('mongoose');
-const nutrientModel = require('./models/Nutrient');
-const cropModel = require('./models/Crop');
-const irrigationModel = require('./models/Irrigation');
-const reportCropModel = require('./models/ReportCrop');
-const reportNutrientModel = require('./models/ReportNutrient');
-const reportIrrigationModel = require('./models/ReportIrrigation');
-const espModel = require('./models/Esp');
+const nutrientModel = require('../models/Nutrient');
+const cropModel = require('../models/Crop');
+const irrigationModel = require('../models/Irrigation');
+const reportCropModel = require('../models/ReportCrop');
+const reportNutrientModel = require('../models/ReportNutrient');
+const reportIrrigationModel = require('../models/ReportIrrigation');
+const espModel = require('../models/Esp');
 
 mongoose.connect('mongodb://localhost:27017/germina').then(() => {
     console.log('Database connected');
@@ -22,11 +22,8 @@ const ReportNutrient = mongoose.model('ReportNutrient', reportNutrientModel);
 const ReportIrrigation = mongoose.model('ReportIrrigation', reportIrrigationModel);
 const Esp = mongoose.model('Esp', espModel);
 
-app.use(cors());
-app.use(express.urlencoded())
-app.use(express.json());
 
-app.get('/esp32', (req, res)=>{
+router.get('/esp32', (req, res)=>{
     Esp.find().then(esp => {
         res.json(esp);
     }).catch(error => {
@@ -34,7 +31,7 @@ app.get('/esp32', (req, res)=>{
     });
 });
 
-app.post('/esp32', (req, res) => {
+router.post('/esp32', (req, res) => {
     console.log(req.body);
     let name = req.body.name;
     let drySoil = req.body.drySoil;
@@ -51,7 +48,7 @@ app.post('/esp32', (req, res) => {
     });
 });
 
-app.put('/esp32', (req, res) => {
+router.put('/esp32', (req, res) => {
     console.log(req.body);
     Esp.findOne({name: req.body.name}).then(esp=>{
         esp.drySoil = req.body.drySoil;
@@ -62,7 +59,7 @@ app.put('/esp32', (req, res) => {
     });
 });
 
-app.get('/nutrients', (req, res) => {
+router.get('/nutrients', (req, res) => {
     Nutrient.find().then(nutrients => {
         res.json(nutrients);
     }).catch(error => {
@@ -70,7 +67,7 @@ app.get('/nutrients', (req, res) => {
     });
 });
 
-app.post('/nutrients', (req, res) => {
+router.post('/nutrients', (req, res) => {
     console.log(req.body);
     let name = req.body.name;
     let price = req.body.price;
@@ -89,7 +86,7 @@ app.post('/nutrients', (req, res) => {
     });
 });
 
-app.put('/nutrients', (req, res) => {
+router.put('/nutrients', (req, res) => {
     console.log(req.body);
     Nutrient.findOne({name: req.body.name}).then(nutrient=>{
         nutrient.price = req.body.price;
@@ -102,7 +99,7 @@ app.put('/nutrients', (req, res) => {
     });
 });
 
-app.put('/crops/conclude', (req, res) => {
+router.put('/crops/conclude', (req, res) => {
     Crop.findOne({name: req.body.name}).then(crop=>{
         crop.isActive = false;
         crop.save();
@@ -112,7 +109,7 @@ app.put('/crops/conclude', (req, res) => {
     });
 });
 
-app.put('/crops/addNote', (req, res) => {
+router.put('/crops/addNote', (req, res) => {
     Crop.findOne({name: req.body.name}).then(crop=>{
         crop.notesCrop = req.body.notesCrop;
         crop.save();
@@ -122,7 +119,7 @@ app.put('/crops/addNote', (req, res) => {
     });
 });
 
-app.put('/crops/changeValue', (req, res) => {
+router.put('/crops/changeValue', (req, res) => {
     console.log(req.body);
     Crop.findOne({name: req.body.name}).then(crop=>{
         crop.costOfCrop = req.body.costOfCrop;
@@ -133,7 +130,7 @@ app.put('/crops/changeValue', (req, res) => {
     });
 });
 
-app.get('/crops', (req, res) => {
+router.get('/crops', (req, res) => {
     Crop.find().then(crops => {
         res.json(crops);
     }).catch(error => {
@@ -141,7 +138,7 @@ app.get('/crops', (req, res) => {
     });
 });
 
-app.post('/crops', (req, res) => {
+router.post('/crops', (req, res) => {
     let name = req.body.name;
     let dateOfCreation = req.body.dateOfCreation;
     let age = req.body.age;
@@ -162,7 +159,7 @@ app.post('/crops', (req, res) => {
     });
 });
 
-app.get('/irrigations', (req, res) => {
+router.get('/irrigations', (req, res) => {
     Irrigation.find().then(irrigations => {
         res.json(irrigations);
     }).catch(error => {
@@ -170,7 +167,7 @@ app.get('/irrigations', (req, res) => {
     });
 });
 
-app.post('/irrigations', (req, res) => {
+router.post('/irrigations', (req, res) => {
     let name = req.body.name;
     let dateOfCreation = req.body.dateOfCreation;
     let startHour = req.body.startHour;
@@ -209,20 +206,9 @@ app.post('/irrigations', (req, res) => {
     });
 });
 
-app.put('/irrigations/conclude', (req, res) => {
-    Irrigation.findOne({name: req.body.name}).then(irrigation=>{
-        irrigation.state = false;
-        irrigation.isFinished = true;
-        irrigation.save();
-        res.send(irrigation);
-    }).catch(error => {
-        res.send('Erro ao carregar o cultivo');
-    });
-});
-
 //################################## REPORTS #################################################
 
-app.get('/reportCrop', (req, res) => {
+router.get('/reportCrop', (req, res) => {
     ReportCrop.find().then(reportCrop => {
         res.json(reportCrop);
     }).catch(error => {
@@ -230,7 +216,7 @@ app.get('/reportCrop', (req, res) => {
     });
 });
 
-app.post('/reportCrop', (req, res)=>{
+router.post('/reportCrop', (req, res)=>{
     let description = req.body.description;
     let date = req.body.date;
     let value = req.body.value;
@@ -246,7 +232,7 @@ app.post('/reportCrop', (req, res)=>{
     });
 });
 
-app.get('/reportNutrient', (req, res) => {
+router.get('/reportNutrient', (req, res) => {
     ReportNutrient.find().then(reportNutrient => {
         res.json(reportNutrient);
     }).catch(error => {
@@ -254,7 +240,7 @@ app.get('/reportNutrient', (req, res) => {
     });
 });
 
-app.post('/reportNutrient', (req, res)=>{
+router.post('/reportNutrient', (req, res)=>{
     let description = req.body.description;
     let date = req.body.date;
     let value = req.body.value;
@@ -270,7 +256,7 @@ app.post('/reportNutrient', (req, res)=>{
     });
 });
 
-app.get('/reportIrrigation', (req, res) => {
+router.get('/reportIrrigation', (req, res) => {
     ReportIrrigation.find().then(reportIrrigation => {
         res.json(reportIrrigation);
     }).catch(error => {
@@ -278,7 +264,7 @@ app.get('/reportIrrigation', (req, res) => {
     });
 });
 
-app.post('/reportIrrigation', (req, res)=>{
+router.post('/reportIrrigation', (req, res)=>{
     let description = req.body.description;
     let date = req.body.date;
     let cropUsed = req.body.cropUsed;
@@ -298,28 +284,4 @@ app.post('/reportIrrigation', (req, res)=>{
     });
 });
 
-//a cada segundo confere se existe uma irrigação para ligar
-setInterval(async ()=>{
-    let irrigationsToStart = await Irrigation.find({"state": true, "isFinished": false}).exec();
-    let esp32 = await Esp.findOne({"name": "esp32"});
-    if(irrigationsToStart != undefined){
-
-        irrigationsToStart.forEach((i)=>{
-            let duration = i.timeToUse * 60000;
-            i.isFinished = true;
-            i.save();
-            let func = (irrigation) => {
-                return () => {     
-                    irrigation.state = false;
-                    irrigation.isFinished = false;
-                    irrigation.save();
-                    esp32.drySoil = 0;
-                    esp32.save();                    
-                }
-            };
-            setTimeout(func(i), duration);
-        });
-    }
-}, 1000);
-
-app.listen(3000, () => console.log('Server rodando'));
+module.exports = router;*/

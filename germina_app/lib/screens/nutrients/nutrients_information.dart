@@ -98,7 +98,8 @@ class _NutrientInformationState extends State<NutrientInformation> {
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
                       'Quantidade Total : ' +
-                          currentNutrient.totalAmount.toString(),
+                          currentNutrient.totalAmount.toString() +
+                          ' mg',
                       style: const TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.w300),
                     ),
@@ -166,11 +167,12 @@ class _NutrientInformationState extends State<NutrientInformation> {
                                     'Quantidade: ' +
                                         currentNutrient
                                             .buysNutrient[note].quantAdd
-                                            .toString(),
+                                            .toString() +
+                                        ' mg',
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
-                                    'Valor: ' +
+                                    'Valor: R\$ ' +
                                         currentNutrient.buysNutrient[note].price
                                             .toStringAsFixed(2),
                                     textAlign: TextAlign.center,
@@ -218,7 +220,7 @@ class _NutrientInformationState extends State<NutrientInformation> {
                                   qntAdd = int.parse(text);
                                 },
                                 decoration: const InputDecoration(
-                                    hintText: 'quantidade p/ adicionar'),
+                                    hintText: 'quantidade em mg p/ adicionar'),
                                 keyboardType: TextInputType.number,
                               ),
                             ),
@@ -238,8 +240,8 @@ class _NutrientInformationState extends State<NutrientInformation> {
                                       price = double.parse(text);
                                     }
                                   },
-                                  decoration:
-                                      const InputDecoration(hintText: 'valor'),
+                                  decoration: const InputDecoration(
+                                      hintText: 'Valor R\$'),
                                   keyboardType: TextInputType.number,
                                 )),
                             Padding(
